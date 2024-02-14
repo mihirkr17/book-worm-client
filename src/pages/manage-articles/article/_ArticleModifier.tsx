@@ -1,0 +1,174 @@
+import { CookieParser, imgSrcSet } from '@/Functions/common';
+import { useFetch } from '@/Hooks/useFetch';
+import useMessage from '@/Hooks/useMessage';
+import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+
+const ArticleModifier = ({ articleId, type }: any) => {
+
+   const [thumbnailPreview, setThumbnailPreview] = useState("");
+   const { msg, setMessage } = useMessage();
+   const router = useRouter();
+
+
+   const { data }: any = useFetch(articleId && `/articles/single/${articleId}`);
+
+   const article = data?.data?.article;
+
+   // Image pre-viewer
+   function previewImage(file: any, setState: any) {
+
+      const fileReader = new FileReader();
+
+      fileReader.onload = (event: any) => {
+
+         if ((file?.size / 1024) > 800) {
+            setState("");
+            return window.alert("File size must be 400KB");
+         }
+
+         const src = event.target.result;
+         setState(src);
+      };
+
+      fileReader.readAsDataURL(file);
+   }
+
+   async function handleBook(e: any) {
+      try {
+
+         e.preventDefault();
+
+         const formData = new FormData(e.target);
+
+         const cookie = CookieParser();
+
+         let uri: string = `api/v1/articles/create`;
+         let method = "POST";
+         let createStatus = false;
+
+         if (type === "modify" && articleId) {
+            uri = `api/v1/articles/modify/${articleId}`;
+            method = "PUT";
+         } else {
+            createStatus = true;
+         }
+
+         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}${uri}`, {
+            method: method,
+            headers: {
+               Authorization: `Bearer ${cookie?.appSession}`
+            },
+            body: formData
+         });
+
+
+         const result = await response.json();
+
+         if (result?.success) {
+            setMessage(result?.message, "success");
+
+            if (createStatus) {
+               router.push(`/manage-articles`);
+            }
+         } else {
+            return setMessage(result?.message, "danger");
+         }
+
+      } catch (error: any) {
+         setMessage(error?.message, "danger");
+      }
+   }
+
+   const imgBoxStyle: any = {
+      width: "100%",
+      height: "200px",
+      position: "relative",
+      border: "1px dashed #ababab",
+      textAlign: "center"
+   }
+
+   const imgStyle: any = {
+      width: "100%",
+      height: "100%",
+      objectFit: "cover"
+   }
+
+   const fileStyle: any = {
+      opacity: 0,
+      width: "100%",
+      height: "100%",
+      position: "absolute",
+      top: 0,
+      left: 0
+   }
+
+   const spStyle = {
+      lineHeight: "5",
+      color: "gray"
+   }
+
+   return (
+      <div className='py-5'>
+         <div className='py-3 text-center'>
+            <h1>{type === "modify" ? "Edit Article" : "Create New Article"}</h1>
+            {msg}
+         </div>
+         <div className="p-2">
+            <form encType='multipart/form-data' onSubmit={handleBook}>
+               <div className='row'>
+                  <div className="col-lg-7 mx-auto">
+                     <div className="row">
+                        <div className="col-12 mb-3">
+                           <label htmlFor="title" className='form-label'>Article Title</label>
+                           <input type="text" name="title" id="title" className='form-control' defaultValue={article?.title || ""} />
+                        </div>
+                       
+
+                        <div className="col-12 mb-3">
+                           <label htmlFor="thumbnail" className='form-label'>Article Thumbnail</label>
+                           <div style={imgBoxStyle}>
+                              {
+                                 thumbnailPreview ?
+                                    <img src={thumbnailPreview || ""}
+                                       alt=""
+                                       srcSet={thumbnailPreview || ""}
+                                       style={imgStyle}
+                                    /> : article?.thumbnail ? <img src={imgSrcSet(article?.thumbnail) || ""}
+                                       alt=""
+                                       srcSet={imgSrcSet(article?.thumbnail)  || ""}
+                                       style={imgStyle}
+                                    /> : <span style={spStyle}>Upload Article Thumbnail</span>
+                              }
+
+                              <input
+                                 className="form-control form-control-sm"
+                                 type="file"
+                                 name="thumbnail"
+                                 id="thumbnail"
+                                 accept=".jpeg, .jpg, .png, .gif"
+                                 onChange={(e: any) => previewImage(e.target.files[0], setThumbnailPreview)}
+                                 style={fileStyle}
+                              />
+                           </div>
+                        </div>
+
+                         
+                        <div className="col-12 mb-3">
+                           <label htmlFor="content" className='form-label'>Article Description</label>
+                           <textarea name="content" className='form-control' id="content" cols={30} rows={8} defaultValue={article?.content || ""}></textarea>
+                        </div>
+
+                        <div className="col-12 mb-3">
+                           <button className='btn btn-primary' type='submit'>{type === "modify" ? "Modify Now" : "Add Article"}</button>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+   );
+};
+
+export default ArticleModifier;

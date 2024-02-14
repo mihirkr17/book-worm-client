@@ -1,0 +1,37 @@
+.footer-color {
+   background: #1C1854;
+   margin-top: 10px;
+   /* margin-bottom: 5cm; */
+   text-align: center;
+}
+
+a { 
+   font-size: 17px;
+   margin-left: 40px;  
+
+}
+
+.list-inline-item {
+   color: white;
+   margin-top: 0.75cm;
+   margin-bottom: 0.75cm;
+}
+
+.relative {
+   position: relative;
+   bottom: 0;
+}
+
+.container {
+   margin-bottom: 20px;
+   width: 100%;
+}
+
+.kaggle-link{
+   color: #11a6a1;
+}
+
+.kaggle-link:hover{
+   color: #89b3ca;
+
+}

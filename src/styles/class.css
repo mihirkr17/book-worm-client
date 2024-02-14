@@ -1,0 +1,15 @@
+
+
+.pagination a.page-link {
+   color: black;
+}
+
+.pagination a.page-link:hover {
+   color: #11a6a1;
+   text-decoration: none;
+}
+
+
+.custom-pagination-margin {
+   margin-top: 60px;
+}

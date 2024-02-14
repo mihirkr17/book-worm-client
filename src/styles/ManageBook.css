@@ -1,0 +1,35 @@
+.headline{
+    font-weight: bold;
+    margin-top: 60px;
+    color:#1C1854;
+}
+
+.btn{
+    background-color: #1C1854;
+    border-radius: 25px;
+}
+
+.btn:hover {
+    background-color: #11a6a1;
+}
+
+.button-group {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.left-column {
+    background-color: #89b3ca;
+    padding: 20px;
+    border-radius: 15px;
+}
+
+.form-group{
+    font-weight: bold;
+}
+
+.table-img {
+    max-width: 250px;
+    max-height: 250px;
+}

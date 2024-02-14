@@ -1,0 +1,177 @@
+.card2 {
+  margin-top: 30px;
+  margin-bottom: 80px;
+}
+
+.card-highlight2 {
+  background-color: #89b3ca;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  border-radius: 10px;
+  height: 400px;
+  overflow: hidden;
+}
+
+.card-img2 {
+  object-fit: cover;
+  width: 50%;
+  height: 100%;
+  border-radius: 10px 0 0 10px;
+}
+
+.card-body2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
+  flex-grow: 1;
+  text-align: left;
+}
+
+.card-title2,
+.article-meta2,
+.first-paraf {
+  margin-left: 10px;
+}
+
+.card-highlight2 .card-img2 {
+  object-fit: cover;
+  max-width: 80%;
+  margin: auto;
+}
+
+.btn-dark {
+  background-color: #1c1854;
+  color: white;
+  border-radius: 25px;
+  border: none;
+  font-size: 0.9rem;
+  align-self: flex-end;
+  margin-right: 15px;
+}
+
+.btn-dark:hover {
+  background-color: #11a6a1;
+}
+
+.card-title2 {
+  font-size: 1.25rem;
+  font-weight: bold;
+  margin-top: 15px;
+}
+
+.card-text2 {
+  font-size: 1rem;
+}
+
+.my-carousel {
+  margin-top: -40px;
+  margin-bottom: 60px;
+}
+
+.my-carousel .carousel-inner {
+  min-height: 400px;
+}
+
+.headline1 {
+  font-weight: bold;
+  margin-bottom: 20px;
+  margin-top: 50px;
+  color: #1c1854;
+}
+
+.headline2 {
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #1c1854;
+}
+
+.card {
+  margin-top: 60px;
+}
+
+.card-img {
+  object-fit: cover;
+  object-position: center;
+  width: 150px;
+  height: auto;
+  border-radius: 5px;
+}
+
+.card-highlight {
+  background-color: #89b3ca;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border-radius: 10px;
+  padding-left: 15px;
+}
+
+.card-highlight .card-img {
+  object-fit: cover;
+  max-width: 80%;
+  margin: auto;
+}
+
+.btn-dark {
+  background-color: #1c1854;
+  color: white;
+  border-radius: 25px;
+  border: none;
+  font-size: 0.9rem;
+}
+
+.btn-dark:hover {
+  background-color: #11a6a1;
+}
+
+.card-body {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.card-title {
+  font-size: 1.25rem;
+  font-weight: bold;
+}
+
+.card-text {
+  font-size: 1rem;
+}
+
+.card-rating {
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.star {
+  color: rgb(245, 189, 6);
+}
+
+.article-meta {
+  font-size: 1.2em;
+  color: #262626;
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+  height: 45px;
+  width: 45px;
+  outline: white;
+  background-size: 100%, 100%;
+  border-radius: 50%;
+  background-color: #1c1854;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.carousel-control-prev {
+  left: 10px;
+}
+
+.carousel-control-next {
+  right: 10px;
+}
