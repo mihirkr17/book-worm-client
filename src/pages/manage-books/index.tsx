@@ -9,7 +9,7 @@ import React from 'react';
 export default EditorProtectedPage(function () {
    const { msg, setMessage } = useMessage();
    const router = useRouter();
-   const itemsPerPage = 10;
+   const itemsPerPage = 30;
    const currentPage = parseInt(router.query.page as string, 10) || 1;
 
    const { data, refetch }: any = useFetch(`/books?action=false&page=${currentPage}&pageSize=${itemsPerPage}`);
@@ -52,6 +52,35 @@ export default EditorProtectedPage(function () {
       router.push(`/manage-books?page=${newPage}`);
    };
 
+
+
+   async function uploadBookByCsv(e: any) {
+      try {
+         e.preventDefault();
+         const cookie = CookieParser();
+         const formData = new FormData(e.target);
+         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/books/add-book-by-csv`, {
+            method: "POST",
+            headers: {
+               Authorization: `Bearer ${cookie?.appSession || ""}`
+            },
+            body: formData
+         });
+
+         const result = await response.json();
+
+         if (result?.success) {
+            setMessage(result?.message, "success");
+            refetch();
+         } else {
+            setMessage(result?.message, "danger");
+         }
+
+      } catch (error: any) {
+         setMessage(error?.message, "danger");
+      }
+   }
+
    return (
       <div className="container">
 
@@ -61,7 +90,12 @@ export default EditorProtectedPage(function () {
                <h6>Total {totalBooksCount} {totalBooksCount >= 2 ? "Books" : "Book"}</h6>
                {msg}
             </header>
-            <div>
+            <div className='d-flex align-items-center justify-content-center'>
+               <form onSubmit={uploadBookByCsv}>
+                  <label htmlFor="book">Upload By CSV</label>
+                  <input className='form-control' type="file" name="book" id="book" accept='.csv' />
+                  <button type='submit' className='btn btn-info'>Submit</button>
+               </form>
                <Link href={`/manage-books/book/add-book`} className='btn btn-primary'>Add New Book</Link>
             </div>
          </div>
@@ -112,13 +146,22 @@ export default EditorProtectedPage(function () {
                      <a className="page-link" href="#" onClick={() => handlePageChange(currentPage - 1)}>Previous</a>
                   </li>
 
-                  {Array.from({ length: Math.ceil(totalBooksCount / itemsPerPage) }, (_, index) => (
-                     <li key={index} className={`page-item ${currentPage === index + 1 && 'active'}`}>
-                        <a className="page-link" href="#" onClick={() => handlePageChange(index + 1)}>
-                           {index + 1}
-                        </a>
-                     </li>
-                  ))}
+                  {/* Calculate start and end page numbers for the pagination range */}
+                  {Array.from({ length: Math.ceil(totalBooksCount / itemsPerPage) }, (_, index) => {
+                     const startPage = (Math.floor((currentPage - 1) / 7) * 7) + 1;
+                     const endPage = Math.min(startPage + 6, Math.ceil(totalBooksCount / itemsPerPage));
+                     if (index + 1 >= startPage && index + 1 <= endPage) {
+                        return (
+                           <li key={index} className={`page-item ${currentPage === index + 1 && 'active'}`}>
+                              <a className="page-link" href="#" onClick={() => handlePageChange(index + 1)}>
+                                 {index + 1}
+                              </a>
+                           </li>
+                        );
+                     }
+                     return null;
+                  })}
+
 
                   <li className={`page-item ${currentPage === Math.ceil(totalBooksCount / itemsPerPage) && 'disabled'}`}>
                      <a className="page-link" href="#" onClick={() => handlePageChange(currentPage + 1)}>Next</a>

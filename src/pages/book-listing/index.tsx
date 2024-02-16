@@ -56,11 +56,11 @@ const BookListingIndex = ({ searchedBooks, totalBooksCount, allCategories }: any
             <div className="col-sm-3">
                <div className="form-group">
                   <label htmlFor="genre-select">Category</label>
-                  <select className="selectpicker form-control" id="category-select" name='ctg' onChange={(e) => handlePageChange({ ...filters, [e.target.name]: e.target.value })}>
+                  <select className="selectpicker form-control" id="category-select" name='ctg' onChange={(e) => handlePageChange({ ...filters, page: undefined, [e.target.name]: e.target.value })}>
                      <option value="">All</option>
 
                      {
-                        allCategories && allCategories.map((category: any) => {
+                        allCategories && allCategories.filter((e: any) => e?._id).map((category: any) => {
                            return (<option key={category?._id} value={category?._id}>{category?._id}</option>)
                         })
                      }
@@ -105,11 +105,11 @@ const BookListingIndex = ({ searchedBooks, totalBooksCount, allCategories }: any
                Array.isArray(searchedBooks) && searchedBooks.length >= 1 ? searchedBooks.map((book: any) => {
                   return (
                      <div className="col" key={book?._id}>
-                        <div className="card h-100 card-highlight">
+                        <div className="card h-100 card-highlight" title={book?.title}>
                            <img src={imgSrcSet(book?.thumbnail)}
                               className="card-img" />
-                           <div className="card-body d-flex flex-column justify-content-between">
-                              <h5 className="card-title">{book?.title}</h5>
+                           <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
+                              <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
                               <p className="card-text">{book?.authors}</p>
                               <div className="card-rating">
                                  <span className="star">&#9733;</span> {book?.averageRatings || 0}/10
@@ -133,14 +133,30 @@ const BookListingIndex = ({ searchedBooks, totalBooksCount, allCategories }: any
                   <li className={`page-item ${currentPage === 1 && 'disabled'}`}>
                      <a className="page-link" href="#" onClick={() => handlePageChange({ ...filters, page: currentPage - 1 })}>Previous</a>
                   </li>
-
+                  {/* 
                   {Array.from({ length: Math.ceil(totalBooksCount / itemsPerPage) }, (_, index) => (
                      <li key={index} className={`page-item ${currentPage === index + 1 && 'active'}`}>
                         <a className="page-link" href="#" onClick={() => handlePageChange({ ...filters, page: index + 1 })}>
                            {index + 1}
                         </a>
                      </li>
-                  ))}
+                  ))} */}
+
+                  {Array.from({ length: Math.ceil(totalBooksCount / itemsPerPage) }, (_, index) => {
+                     const startPage = (Math.floor((currentPage - 1) / 7) * 7) + 1;
+                     const endPage = Math.min(startPage + 6, Math.ceil(totalBooksCount / itemsPerPage));
+                     if (index + 1 >= startPage && index + 1 <= endPage) {
+                        return (
+                           <li key={index} className={`page-item ${currentPage === index + 1 && 'active'}`}>
+                              <a className="page-link" href="#" onClick={() => handlePageChange({ ...filters, page: index + 1 })}>
+                                 {index + 1}
+                              </a>
+                           </li>
+                        );
+                     }
+                     return null;
+                  })}
+
 
                   <li className={`page-item ${currentPage === Math.ceil(totalBooksCount / itemsPerPage) && 'disabled'}`}>
                      <a className="page-link" href="#" onClick={() => handlePageChange({ ...filters, page: currentPage + 1 })}>Next</a>
