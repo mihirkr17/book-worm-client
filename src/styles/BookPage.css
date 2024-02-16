@@ -29,26 +29,6 @@
 }
 
 
-
-.btn {
-   display: block;
-   margin-top: 10px;
-   padding: 10px 15px;
-   border: none;
-   border-radius: 5px;
-   cursor: pointer;
-   text-align: center;
-   padding: 8px 16px;
-   border-radius: 20px;
-   background-color: #1C1854; 
-   color: white;
-   text-decoration: none;
-}
-
-.btn:hover {
-   background-color: #11a6a1;
-}
-
 .left-column {
    background-color: #89b3ca;
    padding: 20px;

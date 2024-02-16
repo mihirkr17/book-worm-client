@@ -2,8 +2,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import "@/styles/globals.css";
 import "@/styles/class.css";
 import "@/styles/Home.css";
-import "@/styles/Signup.css";
-import "@/styles/Login.css";
 import "@/styles/BookPage.css";
 import "@/styles/ManageBook.css";
 import "@/styles/ArticleListing.css";

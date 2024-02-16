@@ -76,7 +76,6 @@ export default function Home({ highestRatedBooks, newestBooks }: any) {
             )
           })
         }
-        ...
       </Swiper>
 
       <h1 className="text-left my-4 mb-0 headline2">Discover the highest rated books:</h1>
@@ -109,7 +108,6 @@ export default function Home({ highestRatedBooks, newestBooks }: any) {
             )
           })
         }
-        ...
       </Swiper>
 
 

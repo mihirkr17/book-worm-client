@@ -40,7 +40,7 @@ const Login = () => {
          if (result?.success) {
             const { data, message, success } = result;
 
-           
+
             if (data?.accessToken) {
                let cookieResult = addCookie("appSession", data?.accessToken, 16);
 
@@ -60,37 +60,50 @@ const Login = () => {
    }
 
    return (
-      <div className="container">
+      <div>
 
-         <h1 className="text-center headline">Log in</h1>
+
 
          {msg}
-         <div className="left-column">
-            <form onSubmit={handleLogin}>
-               <div className="form-row center">
-                  <div className="form-group col-md-6">
-                     <label htmlFor="email">E-mail</label>
-                     <input type="email" className="form-control" id="email" name='email' />
-                  </div>
-                  <br />
-                  <div className="form-group col-md-6">
-                     <label htmlFor="password">Password</label>
-                     <input type="password" className="form-control" id="password" name='password' />
-                  </div>
-                  <br />
-               </div>
-               <div className="button-group my-3">
-                  <button type="submit" className="btn btn-dark me-3" >Log in</button>
-                  <Link type="button" className="btn btn-dark" href="/forgot-pwd">Forgot password</Link>
-               </div>
+         <div className="row">
 
-               <div className="py-2">
-                  <p>
-                     Already Have an Account ? <br />
-                     <Link href="/signup" style={{ display: "inline-block" }} className='btn btn-sm btn-primary'>Register</Link>
-                  </p>
-               </div>
-            </form>
+            <div className="col-md-7"></div>
+
+            <div className="col-md-5 mx-auto">
+
+               <h1 className="text-center headline pb-4">Log in</h1>
+               <form onSubmit={handleLogin}>
+                  <div className="row">
+                     <div className="col-md-12 mb-3">
+                        <label htmlFor="email" className='form-label'>E-mail</label>
+                        <input type="email" className="form-control" id="email" name='email' />
+                     </div>
+
+                     <div className="col-md-12 mb-3">
+                        <label htmlFor="password" className='form-label w-100'>
+                           <div className='d-flex align-items-center justify-content-between'>
+                              Password
+                              <Link href="/forgot-pwd" style={{ color: "blue", textDecoration: "underline" }}>Forgot password ?</Link>
+                           </div>
+                        </label>
+                        <input type="password" className="form-control" id="password" name='password' />
+                     </div>
+
+                     <div className="col-12 text-center">
+                        <button type="submit" className="btn btn-dark w-100" >Log in</button>
+                     </div>
+                  </div>
+
+                  <div className="py-4">
+                     <p>
+                        New to Bookworm ?
+                        <Link href="/signup" style={{ color: "blueviolet", marginLeft: "10px" }}>Register Here</Link>
+                     </p>
+                  </div>
+               </form>
+            </div>
+
+
 
 
          </div>

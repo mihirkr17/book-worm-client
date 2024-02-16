@@ -1,4 +1,10 @@
+#content-wrapper {
+   padding: 50px 0;
+}
 
+.container {
+   /* min-height: 74.3%; */
+}
 
 .pagination a.page-link {
    color: black;
@@ -9,7 +15,69 @@
    text-decoration: none;
 }
 
-
 .custom-pagination-margin {
    margin-top: 60px;
+}
+
+/* .btn {
+   display: block;
+   margin-top: 10px;
+   padding: 10px 15px;
+   border: none;
+   border-radius: 5px;
+   cursor: pointer;
+   text-align: center;
+   padding: 8px 16px;
+   border-radius: 20px;
+   background-color: #1C1854; 
+   color: white;
+   text-decoration: none;
+} */
+
+.btn-dark {
+   background-color: #1c1854;
+   color: white;
+   /* border-radius: 25px; */
+   border: none;
+   font-size: 0.9rem;
+   align-self: flex-end;
+   margin-right: 15px;
+}
+
+.btn:hover {
+   background-color: #11a6a1;
+}
+
+.button-group {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.button-group .btn {
+   margin-inline: 15px;
+}
+
+/* sign up & login page css */
+.headline {
+   font-weight: bold;
+   margin-top: 60px;
+   color: #1c1854;
+}
+
+.left-column {
+   background-color: #89b3ca;
+   padding: 20px;
+   border-radius: 15px;
+}
+
+.form-group {
+   font-weight: bold;
+}
+
+.form-row {
+   margin: 0 auto;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
 }

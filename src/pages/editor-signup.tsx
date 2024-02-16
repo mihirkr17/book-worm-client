@@ -58,51 +58,46 @@ const EditorSignUp = () => {
 
          {msg}
 
-         <h1 className="text-center headline">Sign up To Editor</h1>
+         <div className="row">
+            <div className='col-md-7'></div>
+            <div className='col-md-5 mx-auto'>
 
-         <div className="left-column">
-            <form onSubmit={handleSignUp}>
-               <div className="form-row center">
-                  <div className="form-group col-md-6 -center">
-                     <label htmlFor="firstName">First name</label>
-                     <input type="text" className="form-control" name='firstName' id="firstName" />
-                  </div>
-                  <br />
-                  <div className="form-group col-md-6">
-                     <label htmlFor="lastName">Last name</label>
-                     <input type="text" className="form-control" name='lastName' id="lastName" />
-                  </div>
-                  <br />
-               </div>
-               <div className="form-row center">
-                  <div className="form-group col-md-6 -center">
-                     <label htmlFor="email">E-mail</label>
-                     <input type="email" className="form-control" name='email' id="email" />
-                  </div>
-                  <br />
-                  <div className="form-group col-md-6">
-                     <label htmlFor="login">Login</label>
-                     <input type="text" className="form-control" id="login" />
-                  </div>
-                  <br />
-               </div>
-               <div className="form-row center">
-                  <div className="form-group col-md-6">
-                     <label htmlFor="password">Password</label>
-                     <input type="password" name='password' className="form-control" id="password" />
-                  </div>
-                  <br />
-               </div>
+               <h1 className="text-center headline pb-4">Sign Up To Editor</h1>
+               <form onSubmit={handleSignUp}>
+                  <div className="row">
+                     <div className="col-md-12 mb-3">
+                        <label htmlFor="firstName" className='form-label'>First name</label>
+                        <input type="text" className="form-control" name='firstName' id="firstName" required />
+                     </div>
+                     <br />
+                     <div className="col-md-12 mb-3">
+                        <label htmlFor="lastName" className='form-label'>Last name</label>
+                        <input type="text" className="form-control" name='lastName' id="lastName" required />
+                     </div>
 
-               <div className="button-group my-3">
-                  <button type="submit" className="btn btn-dark" >Sign up</button>
+                     <div className="col-md-12 mb-3">
+                        <label htmlFor="email" className='form-label'>E-mail address</label>
+                        <input type="email" className="form-control" name='email' id="email" required />
+                     </div>
 
-                  <p>
-                     Already Have an Account ? <br />
-                     <Link href="/login" className='btn btn-sm btn-primary'>Login</Link>
-                  </p>
-               </div>
-            </form>
+                     <div className="col-md-12 mb-3">
+                        <label htmlFor="password" className='form-label'>Password</label>
+                        <input type="password" name='password' className="form-control" id="password" required />
+                     </div>
+                     <div className="col-md-12">
+                        <div className="text-center">
+                           <button type="submit" className="btn btn-dark w-100" >Sign up</button>
+                        </div>
+                     </div>
+                  </div>
+
+                  <div className='pt-4'>
+                     <p>
+                        Already Have an Account ? <Link href="/login" style={{ color: "blueviolet" }}>Login</Link>
+                     </p>
+                  </div>
+               </form>
+            </div>
          </div>
       </div>
    );

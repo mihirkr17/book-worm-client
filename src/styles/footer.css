@@ -5,10 +5,9 @@
    text-align: center;
 }
 
-a { 
+.footer-color a { 
    font-size: 17px;
-   margin-left: 40px;  
-
+   margin-left: 40px;
 }
 
 .list-inline-item {
@@ -20,11 +19,6 @@ a {
 .relative {
    position: relative;
    bottom: 0;
-}
-
-.container {
-   margin-bottom: 20px;
-   width: 100%;
 }
 
 .kaggle-link{

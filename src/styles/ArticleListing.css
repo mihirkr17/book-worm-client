@@ -48,20 +48,6 @@
    margin: auto;
 }
 
-.btn-dark {
-   background-color: #1C1854;
-   color: white;
-   border-radius: 25px;
-   border: none;
-   font-size: 0.9rem;
-   align-self: flex-end;
-   margin-right: 15px;
-}
-
-.btn-dark:hover {
-   background-color: #11a6a1;
-}
-
 
 .card-title {
    font-size: 1.25rem;
