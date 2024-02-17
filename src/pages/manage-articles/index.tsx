@@ -67,7 +67,7 @@ export default EditorProtectedPage(function () {
             </div>
          </div>
 
-         <div className="left-column">
+         <div className="left-column table-responsive">
 
             <table className="table table-bordered text-center align-middle">
                <thead>
@@ -82,7 +82,7 @@ export default EditorProtectedPage(function () {
                </thead>
                <tbody>
                   {
-                     Array.isArray(searchedArticles) && totalArticlesCount >= 1 ?  searchedArticles.map((article: any, index: number) => {
+                     Array.isArray(searchedArticles) && totalArticlesCount >= 1 ? searchedArticles.map((article: any, index: number) => {
                         return (
                            <tr key={article?._id}>
                               <th scope="row">{articleNumber + index}</th>
@@ -93,8 +93,10 @@ export default EditorProtectedPage(function () {
                               <td>{getDateTime(article?.articleCreatedAt)}</td>
                               <td>
                                  <Link href={`/manage-articles/article/modify?id=${article?._id}`} style={{ display: "inline-block" }}
-                                    className="btn btn-dark">Modify</Link>
-                                 <button type="button" className="btn btn-dark ms-3" onClick={() => deleteArticleHandler(article?._id, article?.title)}>Delete</button>
+                                    className="btn btn-info btn-sm">Modify</Link>
+                                 <br />
+                                 <br />
+                                 <button type="button" className="btn btn-danger btn-sm" onClick={() => deleteArticleHandler(article?._id, article?.title)}>Delete</button>
                               </td>
                            </tr>
                         )

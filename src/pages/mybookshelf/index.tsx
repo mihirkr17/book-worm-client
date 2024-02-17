@@ -10,20 +10,23 @@ import ProtectedPage from "@/Functions/ProtectedPage";
 import useMessage from "@/Hooks/useMessage";
 import { CookieParser } from "@/Functions/common";
 import { useAuthContext } from "@/lib/AuthProvider";
+import { useState } from "react";
 
 export default ProtectedPage(() => {
 
    const { user } = useAuthContext();
-   const { data, refetch }: any = useFetch(`/books/mybookself`);
+   const [myBooksLimit, setMyBooksLimit] = useState<number>(10);
+
+   const { data, refetch }: any = useFetch(`/books/mybookself?limit=${myBooksLimit}&page=${myBooksLimit}`);
    const { msg, setMessage } = useMessage();
+
 
 
    const ratedBooks = data?.data?.ratedBooks || [];
    const readBooks = data?.data?.readBooks || [];
    const unreadBooks = data?.data?.unreadBooks || [];
-   const myBooks = data?.data?.myBooks || [];
-
-
+   const myBooks = data?.data?.myBooks[0] || {};
+   
    async function deleteReadCategoryBook(bookId: string) {
       try {
 
@@ -49,6 +52,17 @@ export default ProtectedPage(() => {
       }
    }
 
+
+
+   function slideChanged(e: any) {
+
+      const swipeDirection = e?.swipeDirection || "next";
+
+      if (swipeDirection === "next") {
+         setMyBooksLimit((e: any) => e + 10);
+      }
+   }
+
    return (
       <div className="py-2">
          {msg}
@@ -62,7 +76,7 @@ export default ProtectedPage(() => {
 
          <h1 className="text-left my-4 mb-0 headline1">Rated ({ratedBooks && ratedBooks?.length || 0}):</h1>
          <Swiper
-            spaceBetween={50}
+            spaceBetween={30}
             slidesPerView={3}
             onSlideChange={() => console.log('slide change')}
             onSwiper={(swiper) => console.log(swiper)}
@@ -165,15 +179,17 @@ export default ProtectedPage(() => {
 
          {/* <!-- Books which logged user added to database --> */}
 
-         <h1 className="text-left my-4 mb-0 headline1">Added ({myBooks && myBooks.length || 0}):</h1>
+         <h1 className="text-left my-4 mb-0 headline1">
+            Added ({Array.isArray(myBooks?.totalBooksCount) ? myBooks?.totalBooksCount[0].number : 0})
+         </h1>
          <Swiper
-            spaceBetween={50}
-            slidesPerView={3}
-            onSlideChange={() => console.log('slide change')}
+            spaceBetween={30}
+            slidesPerView={4}
+            onSlideChange={(e) => slideChanged(e)}
             onSwiper={(swiper) => console.log(swiper)}
          >
             {
-               Array.isArray(myBooks) && myBooks.map((book: any) => {
+               Array.isArray(myBooks?.allBooks) && myBooks?.allBooks.map((book: any) => {
                   return (
                      <SwiperSlide key={book?._id}>
                         <div className="row">

@@ -2,17 +2,22 @@ import EditorProtectedPage from '@/Functions/EditorProtectedPage';
 import { CookieParser, imgSrcSet } from '@/Functions/common';
 import { useFetch } from '@/Hooks/useFetch';
 import useMessage from '@/Hooks/useMessage';
+import UploadBooksByCsvModal from '@/components/Modals/UploadBooksByCsvModal';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
 
 export default EditorProtectedPage(function () {
    const { msg, setMessage } = useMessage();
    const router = useRouter();
    const itemsPerPage = 30;
    const currentPage = parseInt(router.query.page as string, 10) || 1;
+   const [filterInfo, setFilterInfo] = useState({
+      q: "",
+      sort: ""
+   });
 
-   const { data, refetch }: any = useFetch(`/books?action=false&page=${currentPage}&pageSize=${itemsPerPage}`);
+   const { data, refetch }: any = useFetch(`/books?action=false&page=${currentPage}&pageSize=${itemsPerPage}&q=${filterInfo?.q || ""}&sort=${filterInfo?.sort || ""}`);
 
    const searchedBooks = data?.data?.searchResults?.searchedBooks || [];
    const totalBooksCount = data?.data?.searchResults?.totalBooksCount[0]?.number || 0;
@@ -54,31 +59,11 @@ export default EditorProtectedPage(function () {
 
 
 
-   async function uploadBookByCsv(e: any) {
-      try {
-         e.preventDefault();
-         const cookie = CookieParser();
-         const formData = new FormData(e.target);
-         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/books/add-book-by-csv`, {
-            method: "POST",
-            headers: {
-               Authorization: `Bearer ${cookie?.appSession || ""}`
-            },
-            body: formData
-         });
+   function handleSearchBook(searchText: string) {
 
-         const result = await response.json();
-
-         if (result?.success) {
-            setMessage(result?.message, "success");
-            refetch();
-         } else {
-            setMessage(result?.message, "danger");
-         }
-
-      } catch (error: any) {
-         setMessage(error?.message, "danger");
-      }
+      setTimeout(() => {
+         setFilterInfo({ ...filterInfo, q: searchText });
+      }, 500)
    }
 
    return (
@@ -91,12 +76,28 @@ export default EditorProtectedPage(function () {
                {msg}
             </header>
             <div className='d-flex align-items-center justify-content-center'>
-               <form onSubmit={uploadBookByCsv}>
-                  <label htmlFor="book">Upload By CSV</label>
-                  <input className='form-control' type="file" name="book" id="book" accept='.csv' />
-                  <button type='submit' className='btn btn-info'>Submit</button>
-               </form>
+               <button type="button" className="btn btn-secondary me-3"
+                  data-bs-toggle="modal"
+                  data-bs-target="#uploadBookByCsvModal">
+                  Upload Books
+               </button>
+               <UploadBooksByCsvModal></UploadBooksByCsvModal>
                <Link href={`/manage-books/book/add-book`} className='btn btn-primary'>Add New Book</Link>
+            </div>
+         </div>
+
+         <div className="py-">
+            <div className="navbar">
+               <div className="container-fluid">
+                  <form className="d-flex" role="search">
+                     <input className="form-control me-2" type="search" placeholder="Search by title" aria-label="Search" onChange={(e) => handleSearchBook(e.target.value)} />
+                     <select name="sort" className='form-select' id="sort" value={filterInfo?.sort || ""} onChange={(e) => setFilterInfo({ ...filterInfo, [e.target.name]: e.target.value })}>
+                        <option value="">Relevance</option>
+                        <option value="asc">Ascending</option>
+                        <option value="dsc">Descending</option>
+                     </select>
+                  </form>
+               </div>
             </div>
          </div>
 
@@ -124,8 +125,10 @@ export default EditorProtectedPage(function () {
                               <td>{book?.authors}</td>
                               <td>
                                  <Link href={`/manage-books/book/modify?id=${book?._id}`} style={{ display: "inline-block" }}
-                                    className="btn btn-dark">Modify</Link>
-                                 <button type="button" className="btn btn-dark ms-3" onClick={() => deleteBookHandler(book?._id, book?.title)}>Delete</button>
+                                    className="btn btn-sm btn-info">Modify</Link>
+                                 <br />
+                                 <br />
+                                 <button type="button" className="btn btn-sm btn-danger" onClick={() => deleteBookHandler(book?._id, book?.title)}>Delete</button>
                               </td>
                            </tr>
                         )
