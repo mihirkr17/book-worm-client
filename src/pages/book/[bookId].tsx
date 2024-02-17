@@ -283,18 +283,29 @@ const BookDetails = ({ book }: any) => {
                   )
                })
             }
+            <br /><br />
 
             {
                user?.role && <>
                   <h6>Write Comment</h6>
                   <form className="form-block" onSubmit={handleBookComment}>
                      <div className="row">
-                        <div className="col-md-12">
+                        <div className="col-md-12 mb-3">
                            <div className="form-group">
-                              <textarea className="form-input bg-light" required placeholder="Your text" name='content'></textarea>
+                              <textarea
+                                 rows={5}
+                                 cols={30}
+                                 className="form-control bg-light"
+                                 required
+                                 placeholder="Your text"
+                                 name='content'>
+                              </textarea>
                            </div>
+
                         </div>
-                        <button type='submit' className="btn btn-primary pull-right">Submit</button>
+                        <div className="col-12">
+                           <button type='submit' className="btn btn-primary pull-right">Add Comment</button>
+                        </div>
                      </div>
                   </form>
                </>

@@ -1,11 +1,11 @@
-.footer-color {
-   background: #1C1854;
+.footer_wrapper {
+   background: #efefef;
    margin-top: 10px;
    /* margin-bottom: 5cm; */
    text-align: center;
 }
 
-.footer-color a { 
+.footer_wrapper a { 
    font-size: 17px;
    margin-left: 40px;
 }
@@ -14,11 +14,6 @@
    color: white;
    margin-top: 0.75cm;
    margin-bottom: 0.75cm;
-}
-
-.relative {
-   position: relative;
-   bottom: 0;
 }
 
 .kaggle-link{

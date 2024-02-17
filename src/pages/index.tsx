@@ -34,7 +34,7 @@ export default function Home({ highestRatedBooks, newestBooks }: any) {
                 </p>
 
                 <p className="first-paraf">
-                  {article?.content}</p>
+                  {article?.metaDescription && article?.metaDescription.length >= 100 ? article?.metaDescription.slice(0, 100) + "..." : article?.metaDescription}</p>
                 <Link href={`/article/${article?._id}`} className="btn btn-dark ">Read more</Link>
               </div>
             </div>
@@ -52,6 +52,29 @@ export default function Home({ highestRatedBooks, newestBooks }: any) {
         slidesPerView={3}
         onSlideChange={() => console.log('slide change')}
         onSwiper={(swiper) => console.log(swiper)}
+        breakpoints={{
+          0: {
+            slidesPerView: 1,
+          },
+          400: {
+            slidesPerView: 2,
+          },
+          639: {
+            slidesPerView: 3,
+          },
+          865: {
+            slidesPerView: 3
+          },
+          1000: {
+            slidesPerView: 4
+          },
+          1500: {
+            slidesPerView: 6
+          },
+          1700: {
+            slidesPerView: 7
+          }
+        }}
       >
         {
           Array.isArray(newestBooks) && newestBooks.map((book: any) => {
@@ -59,10 +82,11 @@ export default function Home({ highestRatedBooks, newestBooks }: any) {
               <SwiperSlide key={book?._id}>
                 <div className="row">
                   <div className="col-12">
-                    <div className="card h-100 card-highlight">
-                      <img src={book?.thumbnail} className="card-img" />
-                      <div className="card-body d-flex flex-column justify-content-between">
-                        <h5 className="card-title">{book?.title}</h5>
+                    <div className="card card-highlight">
+                      <img src={imgSrcSet(book?.thumbnail)}
+                        className="card-img" />
+                      <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
+                        <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
                         <p className="card-text">{book?.authors}</p>
                         <div className="card-rating">
                           <span className="star">&#9733;</span> {book?.averageRatings || 0}/10
@@ -84,6 +108,29 @@ export default function Home({ highestRatedBooks, newestBooks }: any) {
         slidesPerView={3}
         onSlideChange={() => console.log('slide change')}
         onSwiper={(swiper) => console.log(swiper)}
+        breakpoints={{
+          0: {
+            slidesPerView: 1,
+          },
+          400: {
+            slidesPerView: 2,
+          },
+          639: {
+            slidesPerView: 3,
+          },
+          865: {
+            slidesPerView: 3
+          },
+          1000: {
+            slidesPerView: 4
+          },
+          1500: {
+            slidesPerView: 6
+          },
+          1700: {
+            slidesPerView: 7
+          }
+        }}
       >
         {
           Array.isArray(highestRatedBooks) && highestRatedBooks.map((book: any) => {
@@ -91,10 +138,11 @@ export default function Home({ highestRatedBooks, newestBooks }: any) {
               <SwiperSlide key={book?._id}>
                 <div className="row">
                   <div className="col-12">
-                    <div className="card h-100 card-highlight">
-                      <img src={book?.thumbnail} className="card-img" />
-                      <div className="card-body d-flex flex-column justify-content-between">
-                        <h5 className="card-title">{book?.title}</h5>
+                    <div className="card card-highlight">
+                      <img src={imgSrcSet(book?.thumbnail)}
+                        className="card-img" />
+                      <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
+                        <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
                         <p className="card-text">{book?.authors}</p>
                         <div className="card-rating">
                           <span className="star">&#9733;</span> {book?.averageRatings || 0}/10

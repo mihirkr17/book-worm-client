@@ -8,7 +8,7 @@ import 'swiper/css';
 import Link from "next/link";
 import ProtectedPage from "@/Functions/ProtectedPage";
 import useMessage from "@/Hooks/useMessage";
-import { CookieParser } from "@/Functions/common";
+import { CookieParser, imgSrcSet } from "@/Functions/common";
 import { useAuthContext } from "@/lib/AuthProvider";
 import { useState } from "react";
 
@@ -26,7 +26,7 @@ export default ProtectedPage(() => {
    const readBooks = data?.data?.readBooks || [];
    const unreadBooks = data?.data?.unreadBooks || [];
    const myBooks = data?.data?.myBooks[0] || {};
-   
+
    async function deleteReadCategoryBook(bookId: string) {
       try {
 
@@ -77,9 +77,31 @@ export default ProtectedPage(() => {
          <h1 className="text-left my-4 mb-0 headline1">Rated ({ratedBooks && ratedBooks?.length || 0}):</h1>
          <Swiper
             spaceBetween={30}
-            slidesPerView={3}
             onSlideChange={() => console.log('slide change')}
             onSwiper={(swiper) => console.log(swiper)}
+            breakpoints={{
+               0: {
+                  slidesPerView: 1,
+               },
+               400: {
+                  slidesPerView: 2,
+               },
+               639: {
+                  slidesPerView: 3,
+               },
+               865: {
+                  slidesPerView: 3
+               },
+               1000: {
+                  slidesPerView: 4
+               },
+               1500: {
+                  slidesPerView: 6
+               },
+               1700: {
+                  slidesPerView: 7
+               }
+            }}
          >
             {
                Array.isArray(ratedBooks) && ratedBooks.map((book: any) => {
@@ -88,9 +110,10 @@ export default ProtectedPage(() => {
                         <div className="row">
                            <div className="col-12">
                               <div className="card  card-highlight">
-                                 <img src={book?.thumbnail} className="card-img" />
-                                 <div className="card-body d-flex flex-column justify-content-between">
-                                    <h5 className="card-title">{book?.title}</h5>
+                                 <img src={imgSrcSet(book?.thumbnail)}
+                                    className="card-img" />
+                                 <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
+                                    <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
                                     <p className="card-text">{book?.authors}</p>
                                     <div className="card-rating">
                                        <span className="star">&#9733;</span> {book?.averageRatings || 0}/10
@@ -114,6 +137,29 @@ export default ProtectedPage(() => {
             slidesPerView={3}
             onSlideChange={() => console.log('slide change')}
             onSwiper={(swiper) => console.log(swiper)}
+            breakpoints={{
+               0: {
+                  slidesPerView: 1,
+               },
+               400: {
+                  slidesPerView: 2,
+               },
+               639: {
+                  slidesPerView: 3,
+               },
+               865: {
+                  slidesPerView: 3
+               },
+               1000: {
+                  slidesPerView: 4
+               },
+               1500: {
+                  slidesPerView: 6
+               },
+               1700: {
+                  slidesPerView: 7
+               }
+            }}
          >
             {
                Array.isArray(readBooks) && readBooks.map((book: any) => {
@@ -122,9 +168,10 @@ export default ProtectedPage(() => {
                         <div className="row">
                            <div className="col-12">
                               <div className="card card-highlight">
-                                 <img src={book?.thumbnail} className="card-img" />
-                                 <div className="card-body d-flex flex-column justify-content-between">
-                                    <h5 className="card-title">{book?.title}</h5>
+                                 <img src={imgSrcSet(book?.thumbnail)}
+                                    className="card-img" />
+                                 <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
+                                    <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
                                     <p className="card-text">{book?.authors}</p>
                                     <div className="card-rating">
                                        <span className="star">&#9733;</span> {book?.averageRatings || 0}/10
@@ -150,6 +197,29 @@ export default ProtectedPage(() => {
             slidesPerView={3}
             onSlideChange={() => console.log('slide change')}
             onSwiper={(swiper) => console.log(swiper)}
+            breakpoints={{
+               0: {
+                  slidesPerView: 1,
+               },
+               400: {
+                  slidesPerView: 2,
+               },
+               639: {
+                  slidesPerView: 3,
+               },
+               865: {
+                  slidesPerView: 3
+               },
+               1000: {
+                  slidesPerView: 4
+               },
+               1500: {
+                  slidesPerView: 6
+               },
+               1700: {
+                  slidesPerView: 7
+               }
+            }}
          >
             {
                Array.isArray(unreadBooks) && unreadBooks.map((book: any) => {
@@ -158,9 +228,10 @@ export default ProtectedPage(() => {
                         <div className="row">
                            <div className="col-12">
                               <div className="card  card-highlight">
-                                 <img src={book?.thumbnail} className="card-img" />
-                                 <div className="card-body d-flex flex-column justify-content-between">
-                                    <h5 className="card-title">{book?.title}</h5>
+                                 <img src={imgSrcSet(book?.thumbnail)}
+                                    className="card-img" />
+                                 <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
+                                    <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
                                     <p className="card-text">{book?.authors}</p>
                                     <div className="card-rating">
                                        <span className="star">&#9733;</span> {book?.averageRatings || 0}/10
@@ -184,9 +255,31 @@ export default ProtectedPage(() => {
          </h1>
          <Swiper
             spaceBetween={30}
-            slidesPerView={4}
             onSlideChange={(e) => slideChanged(e)}
             onSwiper={(swiper) => console.log(swiper)}
+            breakpoints={{
+               0: {
+                  slidesPerView: 1,
+               },
+               400: {
+                  slidesPerView: 2,
+               },
+               639: {
+                  slidesPerView: 3,
+               },
+               865: {
+                  slidesPerView: 3
+               },
+               1000: {
+                  slidesPerView: 4
+               },
+               1500: {
+                  slidesPerView: 6
+               },
+               1700: {
+                  slidesPerView: 7
+               }
+            }}
          >
             {
                Array.isArray(myBooks?.allBooks) && myBooks?.allBooks.map((book: any) => {
@@ -195,9 +288,11 @@ export default ProtectedPage(() => {
                         <div className="row">
                            <div className="col-12">
                               <div className="card  card-highlight">
-                                 <img src={book?.thumbnail} className="card-img" />
-                                 <div className="card-body d-flex flex-column justify-content-between">
-                                    <h5 className="card-title">{book?.title}</h5>
+
+                                 <img src={imgSrcSet(book?.thumbnail)}
+                                    className="card-img" />
+                                 <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
+                                    <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
                                     <p className="card-text">{book?.authors}</p>
                                     <div className="card-rating">
                                        <span className="star">&#9733;</span> {book?.averageRatings || 0}/10

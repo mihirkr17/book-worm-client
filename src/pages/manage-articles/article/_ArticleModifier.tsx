@@ -1,19 +1,27 @@
 import { CookieParser, imgSrcSet } from '@/Functions/common';
 import { useFetch } from '@/Hooks/useFetch';
 import useMessage from '@/Hooks/useMessage';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+
+const CustomEditor = dynamic(() => {
+   return import('@/components/Ckeditors/CustomEditor');
+}, { ssr: false });
 
 const ArticleModifier = ({ articleId, type }: any) => {
 
    const [thumbnailPreview, setThumbnailPreview] = useState("");
    const { msg, setMessage } = useMessage();
+
    const router = useRouter();
-
-
    const { data }: any = useFetch(articleId && `/articles/single/${articleId}`);
 
    const article = data?.data?.article;
+
+   const [description, setDescription] = useState<string>(article?.content || "");
+
+
 
    // Image pre-viewer
    function previewImage(file: any, setState: any) {
@@ -34,12 +42,14 @@ const ArticleModifier = ({ articleId, type }: any) => {
       fileReader.readAsDataURL(file);
    }
 
-   async function handleBook(e: any) {
+   async function handleArticle(e: any) {
       try {
 
          e.preventDefault();
 
          const formData = new FormData(e.target);
+
+         formData.append("content", description);
 
          const cookie = CookieParser();
 
@@ -111,22 +121,22 @@ const ArticleModifier = ({ articleId, type }: any) => {
    return (
       <div className='py-5'>
          <div className='py-3 text-center'>
-            <h1>{type === "modify" ? "Edit Article" : "Create New Article"}</h1>
+            <h1>{type === "modify" ? "Edit : " + article?.title : "Create New Article"}</h1>
             {msg}
          </div>
          <div className="p-2">
-            <form encType='multipart/form-data' onSubmit={handleBook}>
+            <form encType='multipart/form-data' onSubmit={handleArticle}>
                <div className='row'>
                   <div className="col-lg-7 mx-auto">
                      <div className="row">
                         <div className="col-12 mb-3">
-                           <label htmlFor="title" className='form-label'>Article Title</label>
+                           <label htmlFor="title" className='form-label'>Title</label>
                            <input type="text" name="title" id="title" className='form-control' defaultValue={article?.title || ""} />
                         </div>
-                       
+
 
                         <div className="col-12 mb-3">
-                           <label htmlFor="thumbnail" className='form-label'>Article Thumbnail</label>
+                           <label htmlFor="thumbnail" className='form-label'>Thumbnail</label>
                            <div style={imgBoxStyle}>
                               {
                                  thumbnailPreview ?
@@ -136,7 +146,7 @@ const ArticleModifier = ({ articleId, type }: any) => {
                                        style={imgStyle}
                                     /> : article?.thumbnail ? <img src={imgSrcSet(article?.thumbnail) || ""}
                                        alt=""
-                                       srcSet={imgSrcSet(article?.thumbnail)  || ""}
+                                       srcSet={imgSrcSet(article?.thumbnail) || ""}
                                        style={imgStyle}
                                     /> : <span style={spStyle}>Upload Article Thumbnail</span>
                               }
@@ -153,10 +163,26 @@ const ArticleModifier = ({ articleId, type }: any) => {
                            </div>
                         </div>
 
-                         
+
                         <div className="col-12 mb-3">
-                           <label htmlFor="content" className='form-label'>Article Description</label>
+                           <label htmlFor="metaDescription" className='form-label'>Meta description</label>
+                           <textarea name="metaDescription" className='form-control' id="metaDescription" cols={30} rows={5} defaultValue={article?.metaDescription || ""}></textarea>
+                        </div>
+
+
+                        <div className="col-12">
+                           <label htmlFor="content" className='form-label'>Description</label>
+                           <CustomEditor setData={setDescription} initialData={article?.content || 'This is custom editor'}></CustomEditor>
+                        </div>
+
+                        {/* <div className="col-12 mb-3">
+                           <label htmlFor="content" className='form-label'>Description</label>
                            <textarea name="content" className='form-control' id="content" cols={30} rows={8} defaultValue={article?.content || ""}></textarea>
+                        </div> */}
+
+                        <div className="col-12 mb-3">
+                           <label htmlFor="keywords" className='form-label'>Keywords</label>
+                           <input type="text" name="keywords" className='form-control' id="keywords" defaultValue={article?.keywords ? article?.keywords.toString().replaceAll(",", " ") : ""} />
                         </div>
 
                         <div className="col-12 mb-3">

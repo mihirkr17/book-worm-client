@@ -12,28 +12,28 @@ const ArticleId = ({ article }: any) => {
    return (
       <div>
          <Head>
-            <meta name='description' content={article?.content.slice(0, 100)} />
+            <meta name='description' content={article?.metaDescription || ""} />
             <title>{article?.title}</title>
          </Head>
          <div className="row justify-content-center row">
-            <div className="col-md-12 text-center top-row">
+            <div className="col-md-12 text-center top-row mb-3">
                <img src={imgSrcSet(article?.thumbnail)} alt="Book Cover" className="img-fluid rounded mb-3" />
             </div>
 
             <div className="col-md-12 bottom-row">
                <h1 className="h1 text-center">{article?.title}</h1>
 
-               <p className="article-meta text-left">
-                  <span>Published on {getDateTime(article?.articleCreatedAt)}</span>
+               <div className="article-meta text-left py-5">
+                  <small className='text-muted'>Author: {article?.authorName}</small>
                   <br />
-                  <strong>By {article?.authorName}</strong>
-               </p>
+                  <small className='text-muted'><i>Published on {getDateTime(article?.articleCreatedAt)}</i></small>
+               </div>
 
-               <article>
-                  <p>
-                     {article?.content}
-                  </p>
-               </article>
+               <div>
+                  <article dangerouslySetInnerHTML={{ __html: article?.content }}>
+                     {/* {article?.content} */}
+                  </article>
+               </div>
             </div>
          </div>
       </div>

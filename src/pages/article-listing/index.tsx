@@ -32,7 +32,7 @@ const ArticleListingIndex = ({ searchedArticles, totalArticlesCount }: { totalAr
                            </p>
 
                            <p className="first-paraf">
-                              {article?.content}
+                              {article?.metaDescription && article?.metaDescription.length >= 100 ? article?.metaDescription.slice(0, 100) + "..." : article?.metaDescription}
                            </p>
                            <Link href={`/article/${article?._id}`} className="btn btn-dark ">Read more</Link>
                         </div>

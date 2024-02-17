@@ -10,7 +10,8 @@ import React, { useState } from 'react';
 export default EditorProtectedPage(function () {
    const { msg, setMessage } = useMessage();
    const router = useRouter();
-   const itemsPerPage = 30;
+   const itemsPerPage = 20;
+
    const currentPage = parseInt(router.query.page as string, 10) || 1;
    const [filterInfo, setFilterInfo] = useState({
       q: "",
@@ -115,10 +116,10 @@ export default EditorProtectedPage(function () {
                </thead>
                <tbody>
                   {
-                     Array.isArray(searchedBooks) && totalBooksCount >= 1 ? searchedBooks.map((book: any) => {
+                     Array.isArray(searchedBooks) && totalBooksCount >= 1 ? searchedBooks.map((book: any, index: number) => {
                         return (
                            <tr key={book?._id}>
-                              <th scope="row">1</th>
+                              <th scope="row">{index + 1}</th>
                               <td>
                                  <img src={imgSrcSet(book?.thumbnail)} alt="Book Cover" className="img-fluid rounded mb-3 table-img" /></td>
                               <td>{book?.title}</td>
