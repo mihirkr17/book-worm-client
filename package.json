@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "export": "next build && next export"
   },
   "dependencies": {
     "@ckeditor/ckeditor5-build-classic": "^41.1.0",
@@ -26,8 +27,10 @@
   "devDependencies": {
     "@types/node": "^20",
     "@types/nprogress": "^0.2.3",
+    "@types/prop-types": "^15.7.11",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@types/scheduler": "^0.16.8",
     "eslint": "^8",
     "eslint-config-next": "14.1.0",
     "typescript": "^5"

@@ -41,6 +41,8 @@ const ArticleId = ({ article }: any) => {
 };
 
 
+
+
 export const getServerSideProps = (async (req: any) => {
    // Fetch data from external API
    const { articleId } = req?.params;
@@ -56,3 +58,4 @@ export const getServerSideProps = (async (req: any) => {
    }
 })
 export default ArticleId;
+

@@ -56,7 +56,7 @@ const BookListingIndex = ({ searchedBooks, totalBooksCount, allCategories }: any
             <div className="col-sm-3">
                <div className="form-group">
                   <label htmlFor="genre-select">Category</label>
-                  <select className="selectpicker form-control" id="category-select" name='ctg' onChange={(e) => handlePageChange({ ...filters, page: undefined, [e.target.name]: e.target.value })}>
+                  <select className="selectpicker form-control" id="category-select" name='ctg' value={filters?.ctg || ""} onChange={(e) => handlePageChange({ ...filters, page: undefined, [e.target.name]: e.target.value })}>
                      <option value="">All</option>
 
                      {
@@ -71,7 +71,9 @@ const BookListingIndex = ({ searchedBooks, totalBooksCount, allCategories }: any
             <div className="col-sm-3">
                <div className="form-group">
                   <label htmlFor="year-select">Publication year</label>
-                  <select className="selectpicker form-control" id="year-select" name='year' onChange={(e) => handlePageChange({ ...filters, [e.target.name]: e.target.value })}>
+                  <select className="selectpicker form-control" id="year-select" name='year'
+                     value={filters?.year || ""}
+                     onChange={(e) => handlePageChange({ ...filters, [e.target.name]: e.target.value })}>
                      <option value="">All</option>
 
                      {
@@ -87,7 +89,9 @@ const BookListingIndex = ({ searchedBooks, totalBooksCount, allCategories }: any
             <div className="col-sm-3">
                <div className="form-group">
                   <label htmlFor="year-select">Sorting</label>
-                  <select className="selectpicker form-control" id="sorting-select" name='sort' onChange={(e) => handlePageChange({ ...filters, [e.target.name]: e.target.value })}>
+                  <select className="selectpicker form-control" id="sorting-select"
+                     value={filters?.sort || ""}
+                     name='sort' onChange={(e) => handlePageChange({ ...filters, [e.target.name]: e.target.value })}>
                      <option value="">Relevant</option>
                      <option value={'highest_rated'} >Highest rate</option>
                      <option value={'lowest_rated'}>Lowest rate</option>
