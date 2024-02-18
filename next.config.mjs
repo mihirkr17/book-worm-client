@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  unoptimized: true,
+  unoptimized: true
   // output: 'export'
 };
 

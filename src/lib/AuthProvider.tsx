@@ -35,7 +35,7 @@ export default function AuthProvider({
          try {
             const cookie: any = CookieParser();
 
-            if (!cookie) {
+            if (!cookie?.appSession) {
                return setUserInfo({});
             }
             setAuthLoading(true);
