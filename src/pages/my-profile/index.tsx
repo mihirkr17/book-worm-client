@@ -18,7 +18,7 @@ export default ProtectedPage(() => {
          const oldPassword = e.target.oldPassword.value;
          const newPassword = e.target.newPassword.value;
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/auth/credential/change-password`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/auth/credential/change-password`, {
             method: "POST",
             headers: {
                Authorization: `Bearer ${cookie?.appSession ? cookie?.appSession : ""}`,

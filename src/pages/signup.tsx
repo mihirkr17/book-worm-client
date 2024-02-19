@@ -29,7 +29,7 @@ const SignUp = () => {
          const email = e.target.email.value;
          const password = e.target.password.value;
 
-         const response: any = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/auth/user/signup`, {
+         const response: any = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/auth/user/signup`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json"

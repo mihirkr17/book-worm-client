@@ -39,7 +39,7 @@ export default function AuthProvider({
                return setUserInfo({});
             }
             setAuthLoading(true);
-            const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/users/profile`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/users/profile`, {
                credentials: 'include',
                method: "GET",
                headers: {

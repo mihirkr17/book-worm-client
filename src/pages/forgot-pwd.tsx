@@ -24,7 +24,7 @@ export default function ForgotPassword() {
 
 
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/users/credential/check-account`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/users/credential/check-account`, {
             method: "POST",
             headers: {
                "Content-Type": "application/json"
@@ -57,7 +57,7 @@ export default function ForgotPassword() {
 
          const newPassword = e.target.newPassword.value;
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/auth/credential/reset-password`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/auth/credential/reset-password`, {
             method: "PUT",
             headers: {
                "Content-Type": "application/json"

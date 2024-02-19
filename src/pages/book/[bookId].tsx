@@ -21,7 +21,7 @@ const BookDetails = ({ book }: any) => {
          if (!user?._id) throw new Error(`Please Login`);
 
          const cookie: any = CookieParser();
-         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/books/rate/${book?._id}`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/rate/${book?._id}`, {
             method: "POST",
             headers: {
                Authorization: `Bearer ${cookie?.appSession ? cookie?.appSession : ""}`,
@@ -62,7 +62,7 @@ const BookDetails = ({ book }: any) => {
          const cookie = CookieParser();
 
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/books/add-comment/${book?._id}`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/add-comment/${book?._id}`, {
             method: "POST",
             headers: {
                Authorization: `Bearer ${cookie?.appSession || ""}`,
@@ -97,7 +97,7 @@ const BookDetails = ({ book }: any) => {
 
          const cookie = CookieParser();
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/books/action/${bookId}?status=${status}`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/action/${bookId}?status=${status}`, {
             method: "PUT",
             headers: {
                Authorization: `Bearer ${cookie?.appSession ? cookie?.appSession : ""}`
@@ -123,7 +123,7 @@ const BookDetails = ({ book }: any) => {
       try {
          const cookie = CookieParser();
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/books/comment/report/${commentId}`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/comment/report/${commentId}`, {
             method: "POST",
             headers: {
                Authorization: `Bearer ${cookie?.appSession ? cookie?.appSession : ""}`
@@ -153,7 +153,7 @@ const BookDetails = ({ book }: any) => {
          const cookie = CookieParser();
 
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/books/delete-own-comment/${commentId}/${bookId}`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/delete-own-comment/${commentId}/${bookId}`, {
             method: "DELETE",
             headers: {
                Authorization: `Bearer ${cookie?.appSession || ""}`
@@ -320,7 +320,7 @@ const BookDetails = ({ book }: any) => {
 export const getServerSideProps = (async (req: any) => {
    // Fetch data from external API
    const { bookId } = req?.params;
-   const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/books/single/${bookId}`, {
+   const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/single/${bookId}`, {
       method: "GET"
    })
    const data = await res.json()

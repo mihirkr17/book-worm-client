@@ -55,7 +55,7 @@ const BookModifier = ({ bookId, type }: any) => {
             createStatus = true;
          }
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}${uri}`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}${uri}`, {
             method: method,
             headers: {
                Authorization: `Bearer ${cookie?.appSession}`

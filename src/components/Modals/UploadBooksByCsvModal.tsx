@@ -16,7 +16,7 @@ const BookCsv = () => {
 
          const formData = new FormData(e.target);
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/books/add-book-by-csv`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/add-book-by-csv`, {
             method: "POST",
             headers: {
                Authorization: `Bearer ${cookie?.appSession || ""}`

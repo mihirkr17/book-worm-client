@@ -20,7 +20,7 @@ export const useFetch = (url: string) => {
 
                setLoading(true);
 
-               const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1${url}`, {
+               const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1${url}`, {
                   credentials: 'include',
                   method: "GET",
                   headers: {

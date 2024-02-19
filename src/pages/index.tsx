@@ -166,7 +166,7 @@ export default function Home({ highestRatedBooks, newestBooks }: any) {
 
 export const getServerSideProps = (async (req: any) => {
   // Fetch data from external API
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/books?action=true`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books?action=true`, {
     method: "GET"
   })
   const data = await res.json()

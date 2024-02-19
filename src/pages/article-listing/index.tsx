@@ -75,7 +75,7 @@ const ArticleListingIndex = ({ searchedArticles, totalArticlesCount }: { totalAr
 export const getServerSideProps = (async (req: any) => {
    // Fetch data from external API
    const { page, limit, } = req?.query;
-   const res = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/articles/?page=${page || 1}&limit=${limit || 10}`, {
+   const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/articles/?page=${page || 1}&limit=${limit || 10}`, {
       method: "GET"
    })
    const data = await res.json()

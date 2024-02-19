@@ -24,7 +24,7 @@ export default EditorProtectedPage(function () {
 
          if (window.confirm(`Want to delete this comment`)) {
             const cookie = CookieParser();
-            const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/books/comment/delete-comment/${commentId}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/comment/delete-comment/${commentId}`, {
                method: "DELETE",
                headers: {
                   Authorization: `Bearer ${cookie?.appSession || ""}`

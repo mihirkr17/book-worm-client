@@ -25,7 +25,7 @@ export default EditorProtectedPage(function () {
 
          if (window.confirm(`Want to delete ${articleTitle}`)) {
             const cookie = CookieParser();
-            const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/articles/delete/${articleId}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/articles/delete/${articleId}`, {
                method: "DELETE",
                headers: {
                   Authorization: `Bearer ${cookie?.appSession || ""}`

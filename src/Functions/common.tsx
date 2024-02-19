@@ -226,7 +226,7 @@ export function imgSrcSet(uri: string) {
    if (isPure) {
       return uri;
    } else {
-      return `${process.env.NEXT_PUBLIC_SERVER_URL}${uri}`;
+      return `${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}${uri}`;
    }
 }
 

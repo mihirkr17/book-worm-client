@@ -31,7 +31,7 @@ export default ProtectedPage(() => {
       try {
 
          const cookie = CookieParser();
-         const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/books/delete-read-category/book/${bookId}`, {
+         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/delete-read-category/book/${bookId}`, {
             method: "DELETE",
             headers: {
                Authorization: `Bearer ${cookie?.appSession ? cookie?.appSession : ""}`

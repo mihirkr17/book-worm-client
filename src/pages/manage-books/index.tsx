@@ -31,7 +31,7 @@ export default EditorProtectedPage(function () {
 
          if (window.confirm(`Want to delete ${bookTitle}`)) {
             const cookie = CookieParser();
-            const response = await fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}api/v1/books/delete/${bookId}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/delete/${bookId}`, {
                method: "DELETE",
                headers: {
                   Authorization: `Bearer ${cookie?.appSession || ""}`
