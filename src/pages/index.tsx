@@ -9,8 +9,9 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css';
 import { getDateTime, imgSrcSet } from "@/Functions/common";
+import { GetServerSideProps, InferGetServerSidePropsType } from "next";
 
-function Home({ highestRatedBooks, newestBooks }: any) {
+function Home({ highestRatedBooks, newestBooks }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
   const { data }: any = useFetch(`/articles/home`);
 
@@ -164,25 +165,31 @@ function Home({ highestRatedBooks, newestBooks }: any) {
 }
 
 
-export const getServerSideProps = (async (req: any) => {
-  // Fetch data from external API
-  try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || 'http://localhost:5000/'}api/v1/books?action=true`, {
-      method: "GET"
-    })
-    const data = await res.json()
+export const getServerSideProps: GetServerSideProps<{ highestRatedBooks: any[], newestBooks: any[] }> =
+  (async (context) => {
+    // Fetch data from external API
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || 'http://localhost:5000/'}api/v1/books?action=true`, {
+        method: "GET"
+      })
+      const data = await res.json()
 
-    // Pass data to the page via props
-    return {
-      props: {
-        totalBooksCount: data?.data?.searchResults?.totalBooksCount[0]?.number || 0,
-        highestRatedBooks: data?.data?.searchResults?.highestRatedBooks,
-        newestBooks: data?.data?.searchResults?.newestBooks
+      // Pass data to the page via props
+      return {
+        props: {
+          highestRatedBooks: data?.data?.searchResults?.highestRatedBooks || [],
+          newestBooks: data?.data?.searchResults?.newestBooks || []
+        }
       }
+    } catch (error: any) {
+      console.log(error?.message);
+      return {
+        props: {
+          highestRatedBooks: [],
+          newestBooks: []
+        }
+      };
     }
-  } catch (error:any) {
-    console.log(error?.message);
-  }
-})
+  })
 
 export default Home
