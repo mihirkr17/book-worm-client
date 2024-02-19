@@ -1,12 +1,10 @@
 import EditorProtectedPage from '@/Functions/EditorProtectedPage';
-import { CookieParser } from '@/Functions/common';
 import { useFetch } from '@/Hooks/useFetch';
-import useMessage from '@/Hooks/useMessage';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-export default EditorProtectedPage(function () {
-   const { msg, setMessage } = useMessage();
+export default EditorProtectedPage(function (props: any) {
+   const { setPopupMsg } = props?.auth;
    const router = useRouter();
    const itemsPerPage = 10;
    const currentPage = parseInt(router.query.page as string, 10) || 1;
@@ -23,11 +21,10 @@ export default EditorProtectedPage(function () {
          if (!commentId) throw new Error(`Required comment id!`);
 
          if (window.confirm(`Want to delete this comment`)) {
-            const cookie = CookieParser();
             const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/comment/delete-comment/${commentId}`, {
                method: "DELETE",
                headers: {
-                  Authorization: `Bearer ${cookie?.appSession || ""}`
+                  Authorization: `Bearer ${props?.auth?.token || ""}`
                }
             });
 
@@ -35,14 +32,14 @@ export default EditorProtectedPage(function () {
 
             if (result?.success) {
                refetch();
-               return setMessage(result?.message, "success");
+               return setPopupMsg(result?.message, "success");
             } else {
-               return setMessage(result?.message, "danger");
+               return setPopupMsg(result?.message, "danger");
             }
          }
 
       } catch (error: any) {
-         setMessage(error?.message, "danger");
+         setPopupMsg(error?.message, "danger");
       }
    }
 
@@ -59,7 +56,6 @@ export default EditorProtectedPage(function () {
             <header>
                <h1 className="text-left">Manage Book Comments</h1> <br />
                <h6>Total {totalCommentsCount} {totalCommentsCount >= 2 ? "Comments" : "Comment"}</h6>
-               {msg}
             </header>
          </div>
 

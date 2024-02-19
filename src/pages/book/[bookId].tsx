@@ -1,18 +1,15 @@
 /* eslint-disable react/no-unescaped-entities */
-import { CookieParser, getDateTime } from '@/Functions/common';
-import useMessage from '@/Hooks/useMessage';
-import { useAuthContext } from '@/lib/AuthProvider';
+import { getDateTime } from '@/Functions/common';
 import { faFlag, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-const BookDetails = ({ book }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+const BookDetails = (props: any) => {
    const router = useRouter();
-   const { user } = useAuthContext();
-
-   const { msg, setMessage } = useMessage();
+   const { book, auth } = props;
+   const { user, setPopupMsg, token } = auth;
 
    // Add book Ratings
    async function handleRating(value: string) {
@@ -21,11 +18,10 @@ const BookDetails = ({ book }: InferGetServerSidePropsType<typeof getServerSideP
 
          if (!user?._id) throw new Error(`Please Login`);
 
-         const cookie: any = CookieParser();
          const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/rate/${book?._id}`, {
             method: "POST",
             headers: {
-               Authorization: `Bearer ${cookie?.appSession ? cookie?.appSession : ""}`,
+               Authorization: `Bearer ${token}`,
                "Content-Type": "application/json",
             },
             body: JSON.stringify({ rating: parseInt(value) })
@@ -35,13 +31,13 @@ const BookDetails = ({ book }: InferGetServerSidePropsType<typeof getServerSideP
          const result = await response.json();
 
          if (result?.success) {
-            setMessage(result?.message, "success");
+            setPopupMsg(result?.message, "success");
             router.push(`/book/${router?.query?.bookId}`);
          } else {
-            setMessage(result?.message, "danger");
+            setPopupMsg(result?.message, "danger");
          }
       } catch (error: any) {
-         setMessage(error?.message, "danger");
+         setPopupMsg(error?.message, "danger");
       }
    }
 
@@ -60,13 +56,10 @@ const BookDetails = ({ book }: InferGetServerSidePropsType<typeof getServerSideP
             throw new Error("Please add some text!");
          }
 
-         const cookie = CookieParser();
-
-
          const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/add-comment/${book?._id}`, {
             method: "POST",
             headers: {
-               Authorization: `Bearer ${cookie?.appSession || ""}`,
+               Authorization: `Bearer ${token}`,
                "Content-Type": "application/json"
             },
             body: JSON.stringify({ content })
@@ -75,15 +68,15 @@ const BookDetails = ({ book }: InferGetServerSidePropsType<typeof getServerSideP
          const result = await response.json();
 
          if (result?.success) {
-            setMessage(result?.message, "success");
+            setPopupMsg(result?.message, "success");
             e.target.reset();
             router.push(`/book/${router?.query?.bookId}`);
          } else {
-            setMessage(result?.message, "danger");
+            setPopupMsg(result?.message, "danger");
          }
 
       } catch (error: any) {
-         setMessage(error?.message, "danger");
+         setPopupMsg(error?.message, "danger");
       }
    }
 
@@ -96,12 +89,10 @@ const BookDetails = ({ book }: InferGetServerSidePropsType<typeof getServerSideP
          if (!user?._id) throw new Error(`Please Login`);
          if (!["read", "to-read"].includes(status)) throw new Error("Invalid status!");
 
-         const cookie = CookieParser();
-
          const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/action/${bookId}?status=${status}`, {
             method: "PUT",
             headers: {
-               Authorization: `Bearer ${cookie?.appSession ? cookie?.appSession : ""}`
+               Authorization: `Bearer ${token}`
             }
          });
 
@@ -109,12 +100,12 @@ const BookDetails = ({ book }: InferGetServerSidePropsType<typeof getServerSideP
          const result = await response.json();
 
          if (result?.success) {
-            return setMessage(result?.message, "success");
+            return setPopupMsg(result?.message, "success");
          } else {
-            return setMessage(result?.message, "danger");
+            return setPopupMsg(result?.message, "danger");
          }
       } catch (error: any) {
-         setMessage(error?.message, "danger");
+         setPopupMsg(error?.message, "danger");
       }
 
    }
@@ -122,14 +113,13 @@ const BookDetails = ({ book }: InferGetServerSidePropsType<typeof getServerSideP
 
    async function reportCommentHandler(commentId: string) {
       try {
-         const cookie = CookieParser();
 
          if (!user?._id) throw new Error(`Please Login`);
 
          const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/comment/report/${commentId}`, {
             method: "POST",
             headers: {
-               Authorization: `Bearer ${cookie?.appSession ? cookie?.appSession : ""}`
+               Authorization: `Bearer ${token}`
             }
          });
 
@@ -137,13 +127,13 @@ const BookDetails = ({ book }: InferGetServerSidePropsType<typeof getServerSideP
          const result = await response.json();
 
          if (result?.success) {
-            return setMessage(result?.message, "success");
+            return setPopupMsg(result?.message, "success");
          } else {
-            return setMessage(result?.message, "danger");
+            return setPopupMsg(result?.message, "danger");
          }
 
       } catch (error: any) {
-         setMessage(error?.message, "danger");
+         setPopupMsg(error?.message, "danger");
       }
    }
 
@@ -153,13 +143,10 @@ const BookDetails = ({ book }: InferGetServerSidePropsType<typeof getServerSideP
 
          if (!user?._id) throw new Error(`Please Login`);
 
-         const cookie = CookieParser();
-
-
          const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/delete-own-comment/${commentId}/${bookId}`, {
             method: "DELETE",
             headers: {
-               Authorization: `Bearer ${cookie?.appSession || ""}`
+               Authorization: `Bearer ${token}`
             },
 
          });
@@ -167,14 +154,14 @@ const BookDetails = ({ book }: InferGetServerSidePropsType<typeof getServerSideP
          const result = await response.json();
 
          if (result?.success) {
-            setMessage(result?.message, "success");
+            setPopupMsg(result?.message, "success");
             router.push(`/book/${router?.query?.bookId}`);
          } else {
-            setMessage(result?.message, "danger");
+            setPopupMsg(result?.message, "danger");
          }
 
       } catch (error: any) {
-         setMessage(error?.message, "danger");
+         setPopupMsg(error?.message, "danger");
       }
    }
 
@@ -185,7 +172,7 @@ const BookDetails = ({ book }: InferGetServerSidePropsType<typeof getServerSideP
    return (
 
       <div className="mt-4">
-         {msg}
+
          <div className="row justify-content-center row">
 
             <div className="col-md-4 text-center left-column">

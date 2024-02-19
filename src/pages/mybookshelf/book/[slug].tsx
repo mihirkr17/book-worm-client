@@ -3,7 +3,7 @@ import BookModifier from "./_BookModifier";
 import Link from "next/link";
 import UserProtectedPage from "@/Functions/UserProtectedPage";
 
-export default UserProtectedPage(function () {
+export default UserProtectedPage(function (props: any) {
 
    const router = useRouter();
 
@@ -14,7 +14,7 @@ export default UserProtectedPage(function () {
          <div className="py-2">
             <Link href={`/mybookshelf`} className="btn btn-sm btn-info" style={{ display: "inline-block" }}>Back</Link>
          </div>
-         <BookModifier bookId={id} type={slug}></BookModifier>
+         <BookModifier bookId={id} type={slug} auth={props?.auth}></BookModifier>
       </div>
    )
 });

@@ -1,14 +1,14 @@
-import { CookieParser, imgSrcSet } from '@/Functions/common';
+import { imgSrcSet } from '@/Functions/common';
 import { useFetch } from '@/Hooks/useFetch';
-import useMessage from '@/Hooks/useMessage';
 import { publishedYear } from '@/assets/fakeData1';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-const BookModifier = ({ bookId, type }: any) => {
+const BookModifier = ({ bookId, type, auth }: any) => {
 
    const [thumbnailPreview, setThumbnailPreview] = useState("");
-   const { msg, setMessage } = useMessage();
+
+   const { setPopupMsg } = auth;
    const router = useRouter();
 
 
@@ -42,8 +42,6 @@ const BookModifier = ({ bookId, type }: any) => {
 
          const formData = new FormData(e.target);
 
-         const cookie = CookieParser();
-
          let uri: string = `api/v1/books/create-book`;
          let method = "POST";
          let createStatus = false;
@@ -58,7 +56,7 @@ const BookModifier = ({ bookId, type }: any) => {
          const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}${uri}`, {
             method: method,
             headers: {
-               Authorization: `Bearer ${cookie?.appSession}`
+               Authorization: `Bearer ${auth?.token || ""}`
             },
             body: formData
          });
@@ -67,17 +65,17 @@ const BookModifier = ({ bookId, type }: any) => {
          const result = await response.json();
 
          if (result?.success) {
-            setMessage(result?.message, "success");
+            setPopupMsg(result?.message, "success");
 
             if (createStatus) {
                router.push(`/manage-books`);
             }
          } else {
-            return setMessage(result?.message, "danger");
+            return setPopupMsg(result?.message, "danger");
          }
 
       } catch (error: any) {
-         setMessage(error?.message, "danger");
+         setPopupMsg(error?.message, "danger");
       }
    }
 
@@ -129,7 +127,6 @@ const BookModifier = ({ bookId, type }: any) => {
       <div className='py-5'>
          <div className='py-3 text-center'>
             <h1>{type === "modify" ? "Edit Book" : "Create New Book"}</h1>
-            {msg}
          </div>
          <div className="p-2">
             <form encType='multipart/form-data' onSubmit={handleBook}>

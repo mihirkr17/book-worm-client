@@ -1,17 +1,15 @@
-import { CookieParser } from "@/Functions/common";
-import useMessage from "@/Hooks/useMessage";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
 
 
-export default function ForgotPassword() {
-
-   const { msg, setMessage } = useMessage();
+export default function ForgotPassword({ auth }: any) {
    const router = useRouter();
    const [inpEmail, seInpEmail] = useState<string>("");
 
    const { action } = router?.query;
+
+   const { setPopupMsg } = auth;
 
 
    async function handleCheckAccountByEmail(e: any) {
@@ -21,8 +19,6 @@ export default function ForgotPassword() {
          const email = inpEmail;
 
          if (!email) throw new Error("Required email address!");
-
-
 
          const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/users/credential/check-account`, {
             method: "POST",
@@ -35,14 +31,14 @@ export default function ForgotPassword() {
          const result = await response.json();
 
          if (result?.success) {
-            setMessage(result?.message, "success");
+            setPopupMsg(result?.message, "success");
             router.push("/forgot-pwd?action=true");
          } else {
-            setMessage(result?.message, "danger");
+            setPopupMsg(result?.message, "danger");
          }
 
       } catch (error: any) {
-         setMessage(error?.message, "danger");
+         setPopupMsg(error?.message, "danger");
       }
    }
 
@@ -68,20 +64,20 @@ export default function ForgotPassword() {
          const result = await response.json();
 
          if (result?.success) {
-            setMessage(result?.message, "success");
+            setPopupMsg(result?.message, "success");
             router.push("/login");
          } else {
-            setMessage(result?.message, "danger");
+            setPopupMsg(result?.message, "danger");
          }
 
       } catch (error: any) {
-         setMessage(error?.message, "danger");
+         setPopupMsg(error?.message, "danger");
       }
    }
    return (
       <div className="container">
 
-         <h1 className="text-center headline">Forgot password</h1>
+         <h1 className="text-center headline pb-5">Forgot password ?</h1>
 
          <div className="left-column">
 

@@ -1,19 +1,14 @@
 import ProtectedPage from "@/Functions/ProtectedPage";
-import { CookieParser } from "@/Functions/common";
-import useMessage from "@/Hooks/useMessage";
-import { useAuthContext } from "@/lib/AuthProvider";
 
-export default ProtectedPage(() => {
+export default ProtectedPage((props: any) => {
 
-   const { user, initialLoader } = useAuthContext();
-   const { msg, setMessage } = useMessage();
+   const { user, initialLoader, setPopupMsg } = props?.auth;
 
 
    async function handleChangePassword(e: any) {
       try {
 
          e.preventDefault();
-         const cookie = CookieParser();
 
          const oldPassword = e.target.oldPassword.value;
          const newPassword = e.target.newPassword.value;
@@ -21,7 +16,7 @@ export default ProtectedPage(() => {
          const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/auth/credential/change-password`, {
             method: "POST",
             headers: {
-               Authorization: `Bearer ${cookie?.appSession ? cookie?.appSession : ""}`,
+               Authorization: `Bearer ${props?.auth?.token}`,
                "Content-Type": "application/json"
             },
             body: JSON.stringify({ oldPassword, newPassword })
@@ -30,20 +25,19 @@ export default ProtectedPage(() => {
          const result = await response.json();
 
          if (result?.success) {
-            setMessage(result?.message, "success");
+            setPopupMsg(result?.message, "success");
             initialLoader();
          } else {
-            setMessage(result?.message, "danger");
+            setPopupMsg(result?.message, "danger");
          }
 
       } catch (error: any) {
-         setMessage(error?.message, "danger");
+         setPopupMsg(error?.message, "danger");
       }
    }
 
    return (
       <div>
-         {msg}
          <div className="py-4 d-flex justify-content-between align-items-center">
             <header>
                <h1 className="text-left">My Profile</h1> <br />

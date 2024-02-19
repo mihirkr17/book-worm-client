@@ -1,15 +1,12 @@
 
 import { addCookie } from '@/Functions/common';
-import useMessage from '@/Hooks/useMessage';
-import { useAuthContext } from '@/lib/AuthProvider';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
-const Login = () => {
+const Login = (props: any) => {
    const router = useRouter();
-   const { msg, setMessage } = useMessage();
-   const { initialLoader, user } = useAuthContext();
+   const { initialLoader, user, setPopupMsg } = props?.auth;
 
 
    useEffect(() => {
@@ -45,7 +42,7 @@ const Login = () => {
                let cookieResult = addCookie("appSession", data?.accessToken, 16);
 
                if (!cookieResult)
-                  return setMessage("Failed to set authentication !", "danger");
+                  return setPopupMsg("Failed to set authentication !", "danger");
 
                initialLoader() && router.push("/");
                return;
@@ -53,26 +50,22 @@ const Login = () => {
 
          }
 
-         setMessage(result?.message, result?.success ? "success" : "danger")
+         setPopupMsg(result?.message, result?.success ? "success" : "danger")
       } catch (error: any) {
-         setMessage(error?.message, "danger");
+         setPopupMsg(error?.message, "danger");
       }
    }
 
    return (
       <div>
-
-
-
-         {msg}
          <div className="row">
 
-            <div className="col-md-7"></div>
+            <div className="col-md-8"></div>
 
-            <div className="col-md-5 mx-auto">
+            <div className="col-md-4 mx-auto">
 
                <h1 className="text-center headline pb-4">Log in</h1>
-               <form onSubmit={handleLogin}>
+               <form onSubmit={handleLogin} className='p-2'>
                   <div className="row">
                      <div className="col-md-12 mb-3">
                         <label htmlFor="email" className='form-label'>E-mail</label>

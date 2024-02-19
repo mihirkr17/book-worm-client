@@ -1,14 +1,13 @@
 import EditorProtectedPage from '@/Functions/EditorProtectedPage';
-import { CookieParser, imgSrcSet } from '@/Functions/common';
+import { imgSrcSet } from '@/Functions/common';
 import { useFetch } from '@/Hooks/useFetch';
-import useMessage from '@/Hooks/useMessage';
 import UploadBooksByCsvModal from '@/components/Modals/UploadBooksByCsvModal';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-export default EditorProtectedPage(function () {
-   const { msg, setMessage } = useMessage();
+export default EditorProtectedPage(function (props:any) {
+   const { setPopupMsg } = props?.auth;
    const router = useRouter();
    const itemsPerPage = 12;
 
@@ -30,11 +29,11 @@ export default EditorProtectedPage(function () {
          if (!bookId) throw new Error(`Required book id!`);
 
          if (window.confirm(`Want to delete ${bookTitle}`)) {
-            const cookie = CookieParser();
+
             const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/delete/${bookId}`, {
                method: "DELETE",
                headers: {
-                  Authorization: `Bearer ${cookie?.appSession || ""}`
+                  Authorization: `Bearer ${props?.auth?.token || ""}`
                }
             });
 
@@ -42,14 +41,14 @@ export default EditorProtectedPage(function () {
 
             if (result?.success) {
                refetch();
-               return setMessage(result?.message, "success");
+               return setPopupMsg(result?.message, "success");
             } else {
-               return setMessage(result?.message, "danger");
+               return setPopupMsg(result?.message, "danger");
             }
          }
 
       } catch (error: any) {
-         setMessage(error?.message, "danger");
+         setPopupMsg(error?.message, "danger");
       }
    }
 
@@ -74,7 +73,6 @@ export default EditorProtectedPage(function () {
             <header>
                <h1 className="text-left">Manage books</h1> <br />
                <h6>Total {totalBooksCount} {totalBooksCount >= 2 ? "Books" : "Book"}</h6>
-               {msg}
             </header>
             <div className='d-flex align-items-center justify-content-center'>
                <button type="button" className="btn btn-secondary me-3"
@@ -82,7 +80,7 @@ export default EditorProtectedPage(function () {
                   data-bs-target="#uploadBookByCsvModal">
                   Upload Books
                </button>
-               <UploadBooksByCsvModal></UploadBooksByCsvModal>
+               <UploadBooksByCsvModal auth={props?.auth}></UploadBooksByCsvModal>
                <Link href={`/manage-books/book/add-book`} className='btn btn-primary'>Add New Book</Link>
             </div>
          </div>

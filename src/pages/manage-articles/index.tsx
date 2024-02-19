@@ -1,13 +1,12 @@
 import EditorProtectedPage from '@/Functions/EditorProtectedPage';
-import { CookieParser, getDateTime, imgSrcSet } from '@/Functions/common';
+import { getDateTime, imgSrcSet } from '@/Functions/common';
 import { useFetch } from '@/Hooks/useFetch';
-import useMessage from '@/Hooks/useMessage';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-export default EditorProtectedPage(function () {
-   const { msg, setMessage } = useMessage();
+export default EditorProtectedPage(function (props: any) {
+   const { setPopupMsg } = props?.auth;
    const router = useRouter();
    const itemsPerPage = 10;
    const currentPage = parseInt(router.query.page as string, 10) || 1;
@@ -24,11 +23,10 @@ export default EditorProtectedPage(function () {
          if (!articleId) throw new Error(`Required article id!`);
 
          if (window.confirm(`Want to delete ${articleTitle}`)) {
-            const cookie = CookieParser();
             const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/articles/delete/${articleId}`, {
                method: "DELETE",
                headers: {
-                  Authorization: `Bearer ${cookie?.appSession || ""}`
+                  Authorization: `Bearer ${props?.auth?.token || ""}`
                }
             });
 
@@ -36,14 +34,14 @@ export default EditorProtectedPage(function () {
 
             if (result?.success) {
                refetch();
-               return setMessage(result?.message, "success");
+               return setPopupMsg(result?.message, "success");
             } else {
-               return setMessage(result?.message, "danger");
+               return setPopupMsg(result?.message, "danger");
             }
          }
 
       } catch (error: any) {
-         setMessage(error?.message, "danger");
+         setPopupMsg(error?.message, "danger");
       }
    }
 
@@ -60,7 +58,6 @@ export default EditorProtectedPage(function () {
             <header>
                <h1 className="text-left">Manage Articles</h1> <br />
                <h6>Total {totalArticlesCount} {totalArticlesCount >= 2 ? "Articles" : "Article"}</h6>
-               {msg}
             </header>
             <div>
                <Link href={`/manage-articles/article/add-article`} className='btn btn-primary'>Add New Article</Link>

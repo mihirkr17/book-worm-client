@@ -1,14 +1,9 @@
-
-import useMessage from '@/Hooks/useMessage';
-import { useAuthContext } from '@/lib/AuthProvider';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
-const SignUp = () => {
-
-   const { msg, setMessage } = useMessage();
-   const { user } = useAuthContext();
+const SignUp = (props:any) => {
+   const { user, setPopupMsg } = props?.auth;
    const router = useRouter();
 
    useEffect(() => {
@@ -42,24 +37,19 @@ const SignUp = () => {
          const result = await response.json();
 
          if (response?.ok) {
-            setMessage(result?.message, "success");
+            setPopupMsg(result?.message, "success");
             return;
          }
 
-         setMessage(result?.message, "danger")
+         setPopupMsg(result?.message, "danger")
 
       } catch (error: any) {
-         setMessage(error?.message, "danger");
+         setPopupMsg(error?.message, "danger");
       }
    }
 
    return (
       <div>
-
-         {msg}
-
-
-
          <div className="row">
             <div className='col-md-7'></div>
             <div className='col-md-5 mx-auto'>

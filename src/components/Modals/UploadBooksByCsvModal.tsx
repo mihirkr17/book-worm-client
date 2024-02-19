@@ -1,15 +1,15 @@
-import { CookieParser } from '@/Functions/common';
+
 import React from 'react';
 
 
 
 
-const BookCsv = () => {
+const UploadBooksByCsvModal = ({ auth }: any) => {
 
    async function uploadBookByCsv(e: any) {
       try {
          e.preventDefault();
-         const cookie = CookieParser();
+
          const bookFile = e.target.book.files[0];
 
          if (!bookFile) throw new Error(`Required csv file!`);
@@ -19,7 +19,7 @@ const BookCsv = () => {
          const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/add-book-by-csv`, {
             method: "POST",
             headers: {
-               Authorization: `Bearer ${cookie?.appSession || ""}`
+               Authorization: `Bearer ${auth?.token || ""}`
             },
             body: formData
          });
@@ -63,4 +63,4 @@ const BookCsv = () => {
    );
 };
 
-export default BookCsv;
+export default UploadBooksByCsvModal;

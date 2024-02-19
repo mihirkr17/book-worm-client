@@ -7,18 +7,15 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import Link from "next/link";
 import ProtectedPage from "@/Functions/ProtectedPage";
-import useMessage from "@/Hooks/useMessage";
-import { CookieParser, imgSrcSet } from "@/Functions/common";
-import { useAuthContext } from "@/lib/AuthProvider";
+import { imgSrcSet } from "@/Functions/common";
 import { useState } from "react";
 
-export default ProtectedPage(() => {
+export default ProtectedPage((props: any) => {
 
-   const { user } = useAuthContext();
+   const { user, setPopupMsg } = props?.auth;
    const [myBooksLimit, setMyBooksLimit] = useState<number>(10);
 
    const { data, refetch }: any = useFetch(`/books/mybookself?limit=${myBooksLimit}&page=${myBooksLimit}`);
-   const { msg, setMessage } = useMessage();
 
 
 
@@ -29,26 +26,24 @@ export default ProtectedPage(() => {
 
    async function deleteReadCategoryBook(bookId: string) {
       try {
-
-         const cookie = CookieParser();
          const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/delete-read-category/book/${bookId}`, {
             method: "DELETE",
             headers: {
-               Authorization: `Bearer ${cookie?.appSession ? cookie?.appSession : ""}`
+               Authorization: `Bearer ${props?.auth?.token || ""}`
             }
          });
 
          const result = await response.json();
 
          if (result?.success) {
-            setMessage(result?.message, "success");
+            setPopupMsg(result?.message, "success");
             refetch()
          } else {
-            setMessage(result?.message, "danger");
+            setPopupMsg(result?.message, "danger");
          }
 
       } catch (error: any) {
-         setMessage(error?.message, "danger");
+         setPopupMsg(error?.message, "danger");
       }
    }
 
@@ -65,7 +60,6 @@ export default ProtectedPage(() => {
 
    return (
       <div className="py-2">
-         {msg}
 
          <div className="py-5">
             <Link href={user?.role === "Editor" ? 'manage-books/book/add-book' : `/mybookshelf/book/add-book`} className='btn btn-primary'>Add New Book</Link>

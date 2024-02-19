@@ -1,5 +1,4 @@
 
-import { useAuthContext } from "@/lib/AuthProvider";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 
@@ -9,7 +8,7 @@ export default function EditorProtectedPage(Component: any) {
    return function WithAuth(props: any) {
       const router = useRouter();
 
-      const { user, authLoading } = useAuthContext();
+      const { user, authLoading } = props?.auth;
 
       useEffect(() => {
          if (authLoading) {

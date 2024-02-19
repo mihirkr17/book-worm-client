@@ -1,6 +1,5 @@
-import { CookieParser, imgSrcSet } from '@/Functions/common';
+import { imgSrcSet } from '@/Functions/common';
 import { useFetch } from '@/Hooks/useFetch';
-import useMessage from '@/Hooks/useMessage';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -9,10 +8,10 @@ const CustomEditor = dynamic(() => {
    return import('@/components/Ckeditors/CustomEditor');
 }, { ssr: false });
 
-const ArticleModifier = ({ articleId, type }: any) => {
+const ArticleModifier = ({ articleId, type, auth }: any) => {
 
    const [thumbnailPreview, setThumbnailPreview] = useState("");
-   const { msg, setMessage } = useMessage();
+   const { setPopupMsg } = auth;
 
    const router = useRouter();
    const { data }: any = useFetch(articleId && `/articles/single/${articleId}`);
@@ -51,8 +50,6 @@ const ArticleModifier = ({ articleId, type }: any) => {
 
          formData.append("content", description);
 
-         const cookie = CookieParser();
-
          let uri: string = `api/v1/articles/create`;
          let method = "POST";
          let createStatus = false;
@@ -67,7 +64,7 @@ const ArticleModifier = ({ articleId, type }: any) => {
          const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}${uri}`, {
             method: method,
             headers: {
-               Authorization: `Bearer ${cookie?.appSession}`
+               Authorization: `Bearer ${auth?.token || ""}`
             },
             body: formData
          });
@@ -76,17 +73,17 @@ const ArticleModifier = ({ articleId, type }: any) => {
          const result = await response.json();
 
          if (result?.success) {
-            setMessage(result?.message, "success");
+            setPopupMsg(result?.message, "success");
 
             if (createStatus) {
                router.push(`/manage-articles`);
             }
          } else {
-            return setMessage(result?.message, "danger");
+            return setPopupMsg(result?.message, "danger");
          }
 
       } catch (error: any) {
-         setMessage(error?.message, "danger");
+         setPopupMsg(error?.message, "danger");
       }
    }
 
@@ -122,7 +119,6 @@ const ArticleModifier = ({ articleId, type }: any) => {
       <div className='py-5'>
          <div className='py-3 text-center'>
             <h1>{type === "modify" ? "Edit : " + article?.title : "Create New Article"}</h1>
-            {msg}
          </div>
          <div className="p-2">
             <form encType='multipart/form-data' onSubmit={handleArticle}>
