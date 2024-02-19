@@ -165,7 +165,7 @@ function Home({ highestRatedBooks, newestBooks }: InferGetServerSidePropsType<ty
 }
 
 
-export const getServerSideProps = (async () => {
+export async function getServerSideProps() {
   // Fetch data from external API
   try {
     const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || 'http://localhost:5000/'}api/v1/books?action=true`, {
@@ -189,6 +189,6 @@ export const getServerSideProps = (async () => {
       }
     };
   }
-}) satisfies GetServerSideProps<{ highestRatedBooks: any[], newestBooks: any[] }>
+}
 
 export default Home
