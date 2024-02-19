@@ -10,7 +10,7 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { getDateTime, imgSrcSet } from "@/Functions/common";
 
-export default function Home({ highestRatedBooks, newestBooks }: any) {
+function Home({ highestRatedBooks, newestBooks }: any) {
 
   const { data }: any = useFetch(`/articles/home`);
 
@@ -166,7 +166,7 @@ export default function Home({ highestRatedBooks, newestBooks }: any) {
 
 export const getServerSideProps = (async (req: any) => {
   // Fetch data from external API
-  const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books?action=true`, {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || 'http://localhost:5000/'}api/v1/books?action=true`, {
     method: "GET"
   })
   const data = await res.json()
@@ -180,3 +180,5 @@ export const getServerSideProps = (async (req: any) => {
     }
   }
 })
+
+export default Home

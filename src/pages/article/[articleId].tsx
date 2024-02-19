@@ -46,7 +46,7 @@ const ArticleId = ({ article }: any) => {
 export const getServerSideProps = (async (req: any) => {
    // Fetch data from external API
    const { articleId } = req?.params;
-   const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/articles/single/${articleId}`, {
+   const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || 'http://localhost:5000/'}api/v1/articles/single/${articleId}`, {
       method: "GET"
    })
    const data = await res.json()

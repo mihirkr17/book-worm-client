@@ -320,7 +320,7 @@ const BookDetails = ({ book }: any) => {
 export const getServerSideProps = (async (req: any) => {
    // Fetch data from external API
    const { bookId } = req?.params;
-   const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/single/${bookId}`, {
+   const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || 'http://localhost:5000/'}api/v1/books/single/${bookId}`, {
       method: "GET"
    })
    const data = await res.json()

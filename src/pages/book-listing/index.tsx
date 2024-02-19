@@ -176,7 +176,7 @@ const BookListingIndex = ({ searchedBooks, totalBooksCount, allCategories }: any
 export const getServerSideProps = (async (req: any) => {
    // Fetch data from external API
    const { page, limit, sort, year, ctg, q } = req?.query;
-   const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books?action=false&page=${page || 1}&pageSize=${limit || 12}&sort=${sort || ""}&year=${year || ""}&ctg=${ctg || ""}&q=${q || ""}`, {
+   const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || 'http://localhost:5000/'}api/v1/books?action=false&page=${page || 1}&pageSize=${limit || 12}&sort=${sort || ""}&year=${year || ""}&ctg=${ctg || ""}&q=${q || ""}`, {
       method: "GET"
    })
    const data = await res.json()
