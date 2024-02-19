@@ -44,7 +44,7 @@ const ArticleId = ({ article }: InferGetServerSidePropsType<typeof getServerSide
 
 
 
-export const getServerSideProps: GetServerSideProps<{ article: any }> = (async (req: any) => {
+export const getServerSideProps = (async (req: any) => {
    try {
       // Fetch data from external API
       const { articleId } = req?.params;
@@ -66,6 +66,6 @@ export const getServerSideProps: GetServerSideProps<{ article: any }> = (async (
          }
       }
    }
-})
+}) satisfies GetServerSideProps<{ article: any }>
 export default ArticleId;
 

@@ -165,31 +165,30 @@ function Home({ highestRatedBooks, newestBooks }: InferGetServerSidePropsType<ty
 }
 
 
-export const getServerSideProps: GetServerSideProps<{ highestRatedBooks: any[], newestBooks: any[] }> =
-  (async (context) => {
-    // Fetch data from external API
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || 'http://localhost:5000/'}api/v1/books?action=true`, {
-        method: "GET"
-      })
-      const data = await res.json()
+export const getServerSideProps = (async () => {
+  // Fetch data from external API
+  try {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || 'http://localhost:5000/'}api/v1/books?action=true`, {
+      method: "GET"
+    })
+    const data = await res.json()
 
-      // Pass data to the page via props
-      return {
-        props: {
-          highestRatedBooks: data?.data?.searchResults?.highestRatedBooks || [],
-          newestBooks: data?.data?.searchResults?.newestBooks || []
-        }
+    // Pass data to the page via props
+    return {
+      props: {
+        highestRatedBooks: data?.data?.searchResults?.highestRatedBooks || [],
+        newestBooks: data?.data?.searchResults?.newestBooks || []
       }
-    } catch (error: any) {
-      console.log(error?.message);
-      return {
-        props: {
-          highestRatedBooks: [],
-          newestBooks: []
-        }
-      };
     }
-  })
+  } catch (error: any) {
+    console.log(error?.message);
+    return {
+      props: {
+        highestRatedBooks: [],
+        newestBooks: []
+      }
+    };
+  }
+}) satisfies GetServerSideProps<{ highestRatedBooks: any[], newestBooks: any[] }>
 
 export default Home

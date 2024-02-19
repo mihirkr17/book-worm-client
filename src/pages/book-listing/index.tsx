@@ -1,11 +1,11 @@
 import { imgSrcSet } from '@/Functions/common';
 import { publishedYear } from '@/assets/fakeData1';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
 
-const BookListingIndex = ({ searchedBooks, totalBooksCount, allCategories }: any) => {
+const BookListingIndex = ({ searchedBooks, totalBooksCount, allCategories }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
    const router = useRouter();
    const { sort, q, year, ctg, page } = router?.query;
@@ -174,7 +174,7 @@ const BookListingIndex = ({ searchedBooks, totalBooksCount, allCategories }: any
 };
 
 
-export const getServerSideProps: GetServerSideProps = (async (req: any) => {
+export const getServerSideProps = (async (req: any) => {
    try {
       // Fetch data from external API
       const { page, limit, sort, year, ctg, q } = req?.query;
@@ -201,6 +201,6 @@ export const getServerSideProps: GetServerSideProps = (async (req: any) => {
          }
       }
    }
-})
+}) satisfies GetServerSideProps<{ searchedBooks: any[], totalBooksCount: number, allCategories: any[] }>
 
 export default BookListingIndex;

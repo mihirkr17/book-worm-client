@@ -1,11 +1,11 @@
 /* eslint-disable react/no-unescaped-entities */
 import { getDateTime, imgSrcSet } from '@/Functions/common';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-const ArticleListingIndex = ({ searchedArticles, totalArticlesCount }: { totalArticlesCount: number, searchedArticles: any[] }) => {
+const ArticleListingIndex = ({ searchedArticles, totalArticlesCount }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
    const router = useRouter();
    const itemsPerPage = 10;
@@ -73,7 +73,7 @@ const ArticleListingIndex = ({ searchedArticles, totalArticlesCount }: { totalAr
    );
 };
 
-export const getServerSideProps: GetServerSideProps = (async (req: any) => {
+export const getServerSideProps = (async (req: any) => {
    try {
       // Fetch data from external API
       const { page, limit, } = req?.query;
@@ -97,7 +97,7 @@ export const getServerSideProps: GetServerSideProps = (async (req: any) => {
          }
       }
    }
-})
+}) satisfies GetServerSideProps
 
 
 export default ArticleListingIndex;
