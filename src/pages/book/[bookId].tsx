@@ -4,6 +4,7 @@ import useMessage from '@/Hooks/useMessage';
 import { useAuthContext } from '@/lib/AuthProvider';
 import { faFlag, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -317,15 +318,20 @@ const BookDetails = ({ book }: any) => {
    );
 };
 
-export const getServerSideProps = (async (req: any) => {
-   // Fetch data from external API
-   const { bookId } = req?.params;
-   const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || 'http://localhost:5000/'}api/v1/books/single/${bookId}`, {
-      method: "GET"
-   })
-   const data = await res.json()
-   // Pass data to the page via props
-   return { props: { book: data?.data?.book } }
+export const getServerSideProps: GetServerSideProps = (async (req: any) => {
+   try {
+      // Fetch data from external API
+      const { bookId } = req?.params;
+      const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || 'http://localhost:5000/'}api/v1/books/single/${bookId}`, {
+         method: "GET"
+      })
+      const data = await res.json()
+      // Pass data to the page via props
+      return { props: { book: data?.data?.book } }
+   } catch (error:any) {
+      console.log(error?.message);
+      return { props: { book: {} } }
+   }
 })
 
 export default BookDetails;

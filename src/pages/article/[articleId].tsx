@@ -1,9 +1,10 @@
 import { getDateTime, imgSrcSet } from '@/Functions/common';
+import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-const ArticleId = ({ article }: any) => {
+const ArticleId = ({ article }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
    const router = useRouter();
 
    const { articleId } = router?.query;
@@ -43,17 +44,26 @@ const ArticleId = ({ article }: any) => {
 
 
 
-export const getServerSideProps = (async (req: any) => {
-   // Fetch data from external API
-   const { articleId } = req?.params;
-   const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || 'http://localhost:5000/'}api/v1/articles/single/${articleId}`, {
-      method: "GET"
-   })
-   const data = await res.json()
-   // Pass data to the page via props
-   return {
-      props: {
-         article: data?.data?.article || {},
+export const getServerSideProps: GetServerSideProps<{ article: any }> = (async (req: any) => {
+   try {
+      // Fetch data from external API
+      const { articleId } = req?.params;
+      const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/articles/single/${articleId}`, {
+         method: "GET"
+      })
+      const data = await res.json()
+      // Pass data to the page via props
+      return {
+         props: {
+            article: data?.data?.article || {},
+         }
+      }
+   } catch (error: any) {
+      console.log(error?.message);
+      return {
+         props: {
+            article: {},
+         }
       }
    }
 })

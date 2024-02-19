@@ -1,5 +1,6 @@
 import { imgSrcSet } from '@/Functions/common';
 import { publishedYear } from '@/assets/fakeData1';
+import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -173,20 +174,31 @@ const BookListingIndex = ({ searchedBooks, totalBooksCount, allCategories }: any
 };
 
 
-export const getServerSideProps = (async (req: any) => {
-   // Fetch data from external API
-   const { page, limit, sort, year, ctg, q } = req?.query;
-   const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || 'http://localhost:5000/'}api/v1/books?action=false&page=${page || 1}&pageSize=${limit || 12}&sort=${sort || ""}&year=${year || ""}&ctg=${ctg || ""}&q=${q || ""}`, {
-      method: "GET"
-   })
-   const data = await res.json()
+export const getServerSideProps: GetServerSideProps = (async (req: any) => {
+   try {
+      // Fetch data from external API
+      const { page, limit, sort, year, ctg, q } = req?.query;
+      const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || 'http://localhost:5000/'}api/v1/books?action=false&page=${page || 1}&pageSize=${limit || 12}&sort=${sort || ""}&year=${year || ""}&ctg=${ctg || ""}&q=${q || ""}`, {
+         method: "GET"
+      })
+      const data = await res.json()
 
-   // Pass data to the page via props
-   return {
-      props: {
-         searchedBooks: data?.data?.searchResults?.searchedBooks,
-         totalBooksCount: data?.data?.searchResults?.totalBooksCount[0]?.number || 0,
-         allCategories: data?.data?.searchResults?.allCategories || []
+      // Pass data to the page via props
+      return {
+         props: {
+            searchedBooks: data?.data?.searchResults?.searchedBooks,
+            totalBooksCount: data?.data?.searchResults?.totalBooksCount[0]?.number || 0,
+            allCategories: data?.data?.searchResults?.allCategories || []
+         }
+      }
+   } catch (error: any) {
+      console.log(error?.message);
+      return {
+         props: {
+            searchedBooks: [],
+            totalBooksCount: 0,
+            allCategories: []
+         }
       }
    }
 })

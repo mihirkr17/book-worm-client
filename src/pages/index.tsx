@@ -50,9 +50,9 @@ function Home({ highestRatedBooks, newestBooks }: InferGetServerSidePropsType<ty
       <h1 className="text-left my-4 mb-0 headline1">Explore new books:</h1>
       <Swiper
         spaceBetween={50}
-        slidesPerView={3}
-        onSlideChange={() => console.log('slide change')}
-        onSwiper={(swiper) => console.log(swiper)}
+        // slidesPerView={3}
+        // onSlideChange={() => console.log('slide change')}
+        // onSwiper={(swiper) => console.log(swiper)}
         breakpoints={{
           0: {
             slidesPerView: 1,
@@ -106,9 +106,9 @@ function Home({ highestRatedBooks, newestBooks }: InferGetServerSidePropsType<ty
       <h1 className="text-left my-4 mb-0 headline2">Discover the highest rated books:</h1>
       <Swiper
         spaceBetween={50}
-        slidesPerView={3}
-        onSlideChange={() => console.log('slide change')}
-        onSwiper={(swiper) => console.log(swiper)}
+        // slidesPerView={3}
+        // onSlideChange={() => console.log('slide change')}
+        // onSwiper={(swiper) => console.log(swiper)}
         breakpoints={{
           0: {
             slidesPerView: 1,
