@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 export default EditorProtectedPage(function () {
    const { msg, setMessage } = useMessage();
    const router = useRouter();
-   const itemsPerPage = 20;
+   const itemsPerPage = 12;
 
    const currentPage = parseInt(router.query.page as string, 10) || 1;
    const [filterInfo, setFilterInfo] = useState({

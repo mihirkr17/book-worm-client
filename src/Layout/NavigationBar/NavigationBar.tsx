@@ -3,8 +3,8 @@ import React from 'react';
 
 const NavigationBar = ({ user, logout }: any) => {
    return (
-      <div id="navbar-wrapper">
-         <nav className="navbar navbar-expand-lg" data-bs-theme="light">
+      <div id="navbar-wrapper" style={{ paddingBottom: "100px" }}>
+         <nav className="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" style={{ borderBottom: "1px solid #e3e3e3" }}>
 
             <div className="container">
                <h2 className="navbar-brand text-dark">
@@ -17,7 +17,7 @@ const NavigationBar = ({ user, logout }: any) => {
 
                <div className="collapse navbar-collapse" id="navbarSupportedContent">
                   <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                  <li className="nav-item">
+                     <li className="nav-item">
                         <Link className="nav-link" aria-current="page" href="/">Home</Link>
                      </li>
                      <li className="nav-item">

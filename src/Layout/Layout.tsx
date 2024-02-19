@@ -19,7 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       <NavigationBar user={user} logout={logout}></NavigationBar>
 
-      <section id="content-wrapper" className="container position-relative">
+      <section id="content-wrapper py-3" className="container position-relative">
          {children}
       </section>
 
