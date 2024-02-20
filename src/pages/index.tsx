@@ -9,10 +9,12 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { getDateTime, imgSrcSet } from "@/Functions/common";
 import { InferGetServerSidePropsType } from "next";
+import Head from "next/head";
 
 function Home({ highestRatedBooks, newestBooks, article }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
 
+  // Home slider viewport options
   const homeSlideBreakPoints = {
     0: {
       slidesPerView: 1,
@@ -36,10 +38,16 @@ function Home({ highestRatedBooks, newestBooks, article }: InferGetServerSidePro
       slidesPerView: 7
     }
   }
+
+
   return (
-    <div>
+    <>
+      <Head>
+        <title>Welcome to Bookworm</title>
+        <meta name="description" content="This is bookworm a perfect book reading site. We have collected books data from kaggle book service." />
+      </Head>
       {
-        article ?
+        article?._id ?
           <div className="col">
             <div className="card2 h-100 card-highlight2">
               <img src={imgSrcSet(article?.thumbnail)} className="card-img2" alt="article image" />
@@ -64,69 +72,80 @@ function Home({ highestRatedBooks, newestBooks, article }: InferGetServerSidePro
 
 
 
-      <h1 className="text-left my-4 mb-0 headline1">Explore new books:</h1>
-      <Swiper
-        spaceBetween={30}
-        breakpoints={homeSlideBreakPoints}
-      >
-        {
-          Array.isArray(newestBooks) && newestBooks.map((book: any) => {
-            return (
-              <SwiperSlide key={book?._id}>
-                <div className="row">
-                  <div className="col-12">
-                    <div className="card card-highlight">
-                      <img src={imgSrcSet(book?.thumbnail)} className="card-img" alt="newest-books-image" />
+      <h2 className="text-left my-4 mb-0 headline1">Explore new books:</h2>
 
-                      <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
-                        <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
-                        <p className="card-text">{book?.authors}</p>
-                        <div className="card-rating">
-                          <span className="star">&#9733;</span> {book?.averageRatings || 0}/10
+      {
+        (Array.isArray(newestBooks) && newestBooks.length >= 1) ?
+          <Swiper
+            spaceBetween={30}
+            breakpoints={homeSlideBreakPoints}
+          >
+            {
+              newestBooks.map((book: any) => {
+                return (
+                  <SwiperSlide key={book?._id}>
+                    <div className="row">
+                      <div className="col-12">
+                        <div className="card card-highlight">
+                          <img src={imgSrcSet(book?.thumbnail)} className="card-img" alt="newest-books-image" />
+
+                          <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
+                            <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
+                            <p className="card-text">{book?.authors}</p>
+                            <div className="card-rating">
+                              <span className="star">&#9733;</span> {book?.averageRatings || 0}/10
+                            </div>
+                            <Link href={`/book/${book?._id}`} className="btn btn-dark mx-auto">Details</Link>
+                          </div>
                         </div>
-                        <Link href={`/book/${book?._id}`} className="btn btn-dark mx-auto">Details</Link>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-            )
-          })
-        }
-      </Swiper>
+                  </SwiperSlide>
+                )
+              })
+            }
+          </Swiper> : <div>
+            <p>No newest books found.</p>
+          </div>
+      }
 
-      <h1 className="text-left my-4 mb-0 headline2">Discover the highest rated books:</h1>
-      <Swiper
-        spaceBetween={30}
-        breakpoints={homeSlideBreakPoints}
-      >
-        {
-          Array.isArray(highestRatedBooks) && highestRatedBooks.map((book: any) => {
-            return (
-              <SwiperSlide key={book?._id}>
-                <div className="row">
-                  <div className="col-12">
-                    <div className="card card-highlight">
-                      <img src={imgSrcSet(book?.thumbnail)} className="card-img" alt="highest-rated-books-image" />
-                      <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
-                        <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
-                        <p className="card-text">{book?.authors}</p>
-                        <div className="card-rating">
-                          <span className="star">&#9733;</span> {book?.averageRatings || 0}/10
+
+      <h2 className="text-left my-4 mb-0 headline2">Discover the highest rated books:</h2>
+
+      {
+        Array.isArray(highestRatedBooks) && highestRatedBooks.length >= 1 ?
+          <Swiper
+            spaceBetween={30}
+            breakpoints={homeSlideBreakPoints}
+          >
+            {
+              highestRatedBooks.map((book: any) => {
+                return (
+                  <SwiperSlide key={book?._id}>
+                    <div className="row">
+                      <div className="col-12">
+                        <div className="card card-highlight">
+                          <img src={imgSrcSet(book?.thumbnail)} className="card-img" alt="highest-rated-books-image" />
+                          <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
+                            <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
+                            <p className="card-text">{book?.authors}</p>
+                            <div className="card-rating">
+                              <span className="star">&#9733;</span> {book?.averageRatings || 0}/10
+                            </div>
+                            <Link href={`/book/${book?._id}`} className="btn btn-dark mx-auto">Details</Link>
+                          </div>
                         </div>
-                        <Link href={`/book/${book?._id}`} className="btn btn-dark mx-auto">Details</Link>
                       </div>
                     </div>
-                  </div>
-                </div>
-              </SwiperSlide>
-            )
-          })
-        }
-      </Swiper>
-
-
-    </div>
+                  </SwiperSlide>
+                )
+              })
+            }
+          </Swiper> : <div>
+            <p>No highest rated found.</p>
+          </div>
+      }
+    </>
   );
 }
 
@@ -134,7 +153,7 @@ function Home({ highestRatedBooks, newestBooks, article }: InferGetServerSidePro
 export async function getServerSideProps() {
   // Fetch data from external API
   try {
-    const res = await fetch(`http://localhost:5000/api/v1/overview`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/overview`, {
       method: "GET"
     })
     const data = await res.json()
