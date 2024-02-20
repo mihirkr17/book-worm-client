@@ -1,6 +1,5 @@
 /* eslint-disable react/no-unescaped-entities */
 
-import { useFetch } from "@/Hooks/useFetch";
 import Link from "next/link";
 
 // Import Swiper React components
@@ -9,23 +8,41 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css';
 import { getDateTime, imgSrcSet } from "@/Functions/common";
-import { GetServerSideProps, InferGetServerSidePropsType } from "next";
+import { InferGetServerSidePropsType } from "next";
 
-function Home({ highestRatedBooks, newestBooks }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-
-  const { data }: any = useFetch(`/articles/home`);
-
-  const article = data?.data?.articles[0] || {};
+function Home({ highestRatedBooks, newestBooks, article }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
 
+  const homeSlideBreakPoints = {
+    0: {
+      slidesPerView: 1,
+    },
+    400: {
+      slidesPerView: 2,
+    },
+    639: {
+      slidesPerView: 3,
+    },
+    865: {
+      slidesPerView: 3
+    },
+    1000: {
+      slidesPerView: 4
+    },
+    1500: {
+      slidesPerView: 6
+    },
+    1700: {
+      slidesPerView: 7
+    }
+  }
   return (
     <div>
-
       {
         article ?
           <div className="col">
             <div className="card2 h-100 card-highlight2">
-              <img src={imgSrcSet(article?.thumbnail)} className="card-img2" />
+              <img src={imgSrcSet(article?.thumbnail)} className="card-img2" alt="article image" />
               <div className="card-body2 d-flex flex-column justify-content-between">
                 <h5 className="card-title2">{article?.title}</h5>
                 <p className="article-meta2 text-left">
@@ -41,7 +58,7 @@ function Home({ highestRatedBooks, newestBooks }: InferGetServerSidePropsType<ty
             </div>
           </div> :
           <div className="col">
-            <p>Please Add Article</p>
+            <p>No article found. Please add a article</p>
           </div>
       }
 
@@ -49,33 +66,8 @@ function Home({ highestRatedBooks, newestBooks }: InferGetServerSidePropsType<ty
 
       <h1 className="text-left my-4 mb-0 headline1">Explore new books:</h1>
       <Swiper
-        spaceBetween={50}
-        // slidesPerView={3}
-        // onSlideChange={() => console.log('slide change')}
-        // onSwiper={(swiper) => console.log(swiper)}
-        breakpoints={{
-          0: {
-            slidesPerView: 1,
-          },
-          400: {
-            slidesPerView: 2,
-          },
-          639: {
-            slidesPerView: 3,
-          },
-          865: {
-            slidesPerView: 3
-          },
-          1000: {
-            slidesPerView: 4
-          },
-          1500: {
-            slidesPerView: 6
-          },
-          1700: {
-            slidesPerView: 7
-          }
-        }}
+        spaceBetween={30}
+        breakpoints={homeSlideBreakPoints}
       >
         {
           Array.isArray(newestBooks) && newestBooks.map((book: any) => {
@@ -84,8 +76,8 @@ function Home({ highestRatedBooks, newestBooks }: InferGetServerSidePropsType<ty
                 <div className="row">
                   <div className="col-12">
                     <div className="card card-highlight">
-                      <img src={imgSrcSet(book?.thumbnail)}
-                        className="card-img" />
+                      <img src={imgSrcSet(book?.thumbnail)} className="card-img" alt="newest-books-image" />
+
                       <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
                         <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
                         <p className="card-text">{book?.authors}</p>
@@ -105,33 +97,8 @@ function Home({ highestRatedBooks, newestBooks }: InferGetServerSidePropsType<ty
 
       <h1 className="text-left my-4 mb-0 headline2">Discover the highest rated books:</h1>
       <Swiper
-        spaceBetween={50}
-        // slidesPerView={3}
-        // onSlideChange={() => console.log('slide change')}
-        // onSwiper={(swiper) => console.log(swiper)}
-        breakpoints={{
-          0: {
-            slidesPerView: 1,
-          },
-          400: {
-            slidesPerView: 2,
-          },
-          639: {
-            slidesPerView: 3,
-          },
-          865: {
-            slidesPerView: 3
-          },
-          1000: {
-            slidesPerView: 4
-          },
-          1500: {
-            slidesPerView: 6
-          },
-          1700: {
-            slidesPerView: 7
-          }
-        }}
+        spaceBetween={30}
+        breakpoints={homeSlideBreakPoints}
       >
         {
           Array.isArray(highestRatedBooks) && highestRatedBooks.map((book: any) => {
@@ -140,8 +107,7 @@ function Home({ highestRatedBooks, newestBooks }: InferGetServerSidePropsType<ty
                 <div className="row">
                   <div className="col-12">
                     <div className="card card-highlight">
-                      <img src={imgSrcSet(book?.thumbnail)}
-                        className="card-img" />
+                      <img src={imgSrcSet(book?.thumbnail)} className="card-img" alt="highest-rated-books-image" />
                       <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
                         <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
                         <p className="card-text">{book?.authors}</p>
@@ -168,7 +134,7 @@ function Home({ highestRatedBooks, newestBooks }: InferGetServerSidePropsType<ty
 export async function getServerSideProps() {
   // Fetch data from external API
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || 'http://localhost:5000/'}api/v1/books?action=true`, {
+    const res = await fetch(`http://localhost:5000/api/v1/overview`, {
       method: "GET"
     })
     const data = await res.json()
@@ -177,7 +143,8 @@ export async function getServerSideProps() {
     return {
       props: {
         highestRatedBooks: data?.data?.searchResults?.highestRatedBooks || [],
-        newestBooks: data?.data?.searchResults?.newestBooks || []
+        newestBooks: data?.data?.searchResults?.newestBooks || [],
+        article: data?.data?.article || {}
       }
     }
   } catch (error: any) {
@@ -185,7 +152,8 @@ export async function getServerSideProps() {
     return {
       props: {
         highestRatedBooks: [],
-        newestBooks: []
+        newestBooks: [],
+        article: {}
       }
     };
   }
