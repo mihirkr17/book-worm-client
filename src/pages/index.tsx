@@ -7,9 +7,10 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Import Swiper styles
 import 'swiper/css';
-import { getDateTime, imgSrcSet } from "@/Functions/common";
+import { getDateTime, imgSrcSet, titleViewer } from "@/Functions/common";
 import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
+import CustomBookCard from "@/components/Cards/CustomBookCard";
 
 function Home({ highestRatedBooks, newestBooks, article }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
@@ -72,79 +73,54 @@ function Home({ highestRatedBooks, newestBooks, article }: InferGetServerSidePro
 
 
 
-      <h2 className="text-left my-4 mb-0 headline1">Explore new books:</h2>
+      <div className="py-5">
+        <h2 className="text-left my-4 mb-0 headline1">Explore new books:</h2>
 
-      {
-        (Array.isArray(newestBooks) && newestBooks.length >= 1) ?
-          <Swiper
-            spaceBetween={30}
-            breakpoints={homeSlideBreakPoints}
-          >
-            {
-              newestBooks.map((book: any) => {
-                return (
-                  <SwiperSlide key={book?._id}>
-                    <div className="row">
-                      <div className="col-12">
-                        <div className="card card-highlight">
-                          <img src={imgSrcSet(book?.thumbnail)} className="card-img" alt="newest-books-image" />
+        {
+          (Array.isArray(newestBooks) && newestBooks.length >= 1) ?
+            <Swiper
+              spaceBetween={30}
+              breakpoints={homeSlideBreakPoints}
+            >
+              {
+                newestBooks.map((book: any) => {
+                  return (
+                    <SwiperSlide key={book?._id}>
+                      <CustomBookCard book={book}></CustomBookCard>
+                    </SwiperSlide>
+                  )
+                })
+              }
+            </Swiper> : <div>
+              <p>No newest books found.</p>
+            </div>
+        }
 
-                          <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
-                            <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
-                            <p className="card-text">{book?.authors}</p>
-                            <div className="card-rating">
-                              <span className="star">&#9733;</span> {book?.averageRatings || 0}/10
-                            </div>
-                            <Link href={`/book/${book?._id}`} className="btn btn-dark mx-auto">Details</Link>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                )
-              })
-            }
-          </Swiper> : <div>
-            <p>No newest books found.</p>
-          </div>
-      }
+      </div>
 
+      <div className="py-5">
+        <h2 className="text-left my-4 mb-0 headline2">Discover the highest rated books:</h2>
 
-      <h2 className="text-left my-4 mb-0 headline2">Discover the highest rated books:</h2>
-
-      {
-        Array.isArray(highestRatedBooks) && highestRatedBooks.length >= 1 ?
-          <Swiper
-            spaceBetween={30}
-            breakpoints={homeSlideBreakPoints}
-          >
-            {
-              highestRatedBooks.map((book: any) => {
-                return (
-                  <SwiperSlide key={book?._id}>
-                    <div className="row">
-                      <div className="col-12">
-                        <div className="card card-highlight">
-                          <img src={imgSrcSet(book?.thumbnail)} className="card-img" alt="highest-rated-books-image" />
-                          <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
-                            <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
-                            <p className="card-text">{book?.authors}</p>
-                            <div className="card-rating">
-                              <span className="star">&#9733;</span> {book?.averageRatings || 0}/10
-                            </div>
-                            <Link href={`/book/${book?._id}`} className="btn btn-dark mx-auto">Details</Link>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </SwiperSlide>
-                )
-              })
-            }
-          </Swiper> : <div>
-            <p>No highest rated found.</p>
-          </div>
-      }
+        {
+          Array.isArray(highestRatedBooks) && highestRatedBooks.length >= 1 ?
+            <Swiper
+              spaceBetween={30}
+              breakpoints={homeSlideBreakPoints}
+            >
+              {
+                highestRatedBooks.map((book: any) => {
+                  return (
+                    <SwiperSlide key={book?._id}>
+                      <CustomBookCard book={book}></CustomBookCard>
+                    </SwiperSlide>
+                  )
+                })
+              }
+            </Swiper> : <div>
+              <p>No highest rated books found.</p>
+            </div>
+        }
+      </div>
     </>
   );
 }

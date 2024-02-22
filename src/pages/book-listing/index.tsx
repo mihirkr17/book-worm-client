@@ -1,5 +1,6 @@
 import { imgSrcSet } from '@/Functions/common';
 import { publishedYear } from '@/assets/fakeData1';
+import CustomBookCard from '@/components/Cards/CustomBookCard';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -109,19 +110,10 @@ const BookListingIndex = ({ searchedBooks, totalBooksCount, allCategories }: Inf
             {
                Array.isArray(searchedBooks) && searchedBooks.length >= 1 ? searchedBooks.map((book: any) => {
                   return (
+
+                    
                      <div className="col" key={book?._id}>
-                        <div className="card h-100 card-highlight" title={book?.title}>
-                           <img src={imgSrcSet(book?.thumbnail)}
-                              className="card-img" />
-                           <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
-                              <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
-                              <p className="card-text">{book?.authors}</p>
-                              <div className="card-rating">
-                                 <span className="star">&#9733;</span> {book?.averageRatings || 0}/10
-                              </div>
-                              <Link href={`/book/${book?._id}`} className="btn btn-dark mx-auto">Details</Link>
-                           </div>
-                        </div>
+                         <CustomBookCard book={book}></CustomBookCard>
                      </div>
                   )
                }) : <div className='col'>

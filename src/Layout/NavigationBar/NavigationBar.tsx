@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-const NavigationBar = ({ user, logout }: any) => {
+const NavigationBar = ({ user, logout, searchTrigger }: any) => {
    return (
       <div id="navbar-wrapper" style={{ paddingBottom: "100px" }}>
          <nav className="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" style={{ borderBottom: "1px solid #e3e3e3" }}>
@@ -26,6 +26,9 @@ const NavigationBar = ({ user, logout }: any) => {
                      <li className="nav-item">
                         <Link className="nav-link" href="/article-listing">Articles</Link>
                      </li>
+                     <li className="nav-item">
+                        <input type="search" onChange={(e) => searchTrigger(e.target.value || "")} />
+                     </li>
                   </ul>
 
                   {
@@ -45,6 +48,11 @@ const NavigationBar = ({ user, logout }: any) => {
                                  <span className="text-end">My Book Shelf</span>
                               </Link>
                            </li>
+                           <li>
+                              <Link href="/manage-books" className="dropdown-item">
+                                 <span>Manage Books</span>
+                              </Link>
+                           </li>
 
                            {
                               user?.role === "Editor" &&
@@ -58,12 +66,6 @@ const NavigationBar = ({ user, logout }: any) => {
                                  <li>
                                     <Link className="dropdown-item" href="/manage-articles">
                                        <span>Manage Articles</span>
-                                    </Link>
-                                 </li>
-
-                                 <li>
-                                    <Link href="/manage-books" className="dropdown-item">
-                                       <span>Manage Books</span>
                                     </Link>
                                  </li>
                                  <li>

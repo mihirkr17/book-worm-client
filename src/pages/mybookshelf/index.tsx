@@ -7,22 +7,45 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import Link from "next/link";
 import ProtectedPage from "@/Functions/ProtectedPage";
-import { imgSrcSet } from "@/Functions/common";
+import { imgSrcSet, titleViewer } from "@/Functions/common";
 import { useState } from "react";
+import CustomBookCard from "@/components/Cards/CustomBookCard";
 
 export default ProtectedPage((props: any) => {
 
    const { user, setPopupMsg } = props?.auth;
-   const [myBooksLimit, setMyBooksLimit] = useState<number>(10);
-
-   const { data, refetch }: any = useFetch(`/books/mybookself?limit=${myBooksLimit}&page=${myBooksLimit}`);
+   const { data, refetch }: any = useFetch(`/books/mybookself`);
 
 
 
    const ratedBooks = data?.data?.ratedBooks || [];
    const readBooks = data?.data?.readBooks || [];
    const unreadBooks = data?.data?.unreadBooks || [];
-   const myBooks = data?.data?.myBooks[0] || {};
+
+   // Home slider viewport options
+   const slideBreakPoints = {
+      0: {
+         slidesPerView: 1,
+      },
+      400: {
+         slidesPerView: 2,
+      },
+      639: {
+         slidesPerView: 3,
+      },
+      865: {
+         slidesPerView: 3
+      },
+      1000: {
+         slidesPerView: 4
+      },
+      1500: {
+         slidesPerView: 6
+      },
+      1700: {
+         slidesPerView: 7
+      }
+   }
 
    async function deleteReadCategoryBook(bookId: string) {
       try {
@@ -47,260 +70,90 @@ export default ProtectedPage((props: any) => {
       }
    }
 
-
-
-   function slideChanged(e: any) {
-
-      const swipeDirection = e?.swipeDirection || "next";
-
-      if (swipeDirection === "next") {
-         setMyBooksLimit((e: any) => e + 10);
-      }
-   }
-
    return (
       <div className="py-2">
 
-         <div className="py-5">
-            <Link href={user?.role === "Editor" ? 'manage-books/book/add-book' : `/mybookshelf/book/add-book`} className='btn btn-primary'>Add New Book</Link>
+         <h1>My Book Self</h1>
+
+
+
+
+         {/* <!-- Books which are already read by logged user --> */}
+
+         <div className="py-3">
+            <h3 className="text-left my-4 mb-0 headline1">Already read ({readBooks && readBooks?.length || 0}):</h3>
+
+            {
+               Array.isArray(readBooks) && readBooks.length >= 1 ? <Swiper
+                  spaceBetween={50}
+                  breakpoints={slideBreakPoints}
+               >
+                  {
+                     readBooks.map((book: any) => {
+                        return (
+                           <SwiperSlide key={book?._id}>
+                              <CustomBookCard book={book} action={"modify"} deleteHandler={deleteReadCategoryBook}></CustomBookCard>
+                           </SwiperSlide>
+                        )
+                     })
+                  }
+               </Swiper> : <div>
+                  <p>Books not found.</p>
+               </div>
+            }
+         </div>
+
+
+
+         {/* <!-- Books which logged user wants to read --> */}
+
+         <div className="py-3">
+            <h3 className="text-left my-4 mb-0 headline1">Want to read ({unreadBooks && unreadBooks.length || 0}):</h3>
+            {
+               Array.isArray(unreadBooks) && unreadBooks.length >= 1 ? <Swiper
+                  spaceBetween={50}
+                  breakpoints={slideBreakPoints}
+               >
+                  {
+                     unreadBooks.map((book: any) => {
+                        return (
+                           <SwiperSlide key={book?._id}>
+                              <CustomBookCard book={book} action={"modify"} deleteHandler={deleteReadCategoryBook}></CustomBookCard>
+                           </SwiperSlide>
+                        )
+                     })
+                  }
+               </Swiper> : <div>
+                  <p>Books not found.</p>
+               </div>
+            }
          </div>
 
 
          {/* <!-- Books which are rated by logged user --> */}
 
-         <h1 className="text-left my-4 mb-0 headline1">Rated ({ratedBooks && ratedBooks?.length || 0}):</h1>
-         <Swiper
-            spaceBetween={30}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper) => console.log(swiper)}
-            breakpoints={{
-               0: {
-                  slidesPerView: 1,
-               },
-               400: {
-                  slidesPerView: 2,
-               },
-               639: {
-                  slidesPerView: 3,
-               },
-               865: {
-                  slidesPerView: 3
-               },
-               1000: {
-                  slidesPerView: 4
-               },
-               1500: {
-                  slidesPerView: 6
-               },
-               1700: {
-                  slidesPerView: 7
-               }
-            }}
-         >
+         <div className="py-3">
+            <h3 className="text-left my-4 mb-0 headline1">Rated ({ratedBooks && ratedBooks?.length || 0}):</h3>
             {
-               Array.isArray(ratedBooks) && ratedBooks.map((book: any) => {
-                  return (
-                     <SwiperSlide key={book?._id}>
-                        <div className="row">
-                           <div className="col-12">
-                              <div className="card  card-highlight">
-                                 <img src={imgSrcSet(book?.thumbnail)}
-                                    className="card-img" />
-                                 <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
-                                    <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
-                                    <p className="card-text">{book?.authors}</p>
-                                    <div className="card-rating">
-                                       <span className="star">&#9733;</span> {book?.averageRatings || 0}/10
-                                    </div>
-                                    <Link href={`/book/${book?._id}`} className="btn btn-dark mx-auto">Details</Link>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </SwiperSlide>
-                  )
-               })
+               Array.isArray(ratedBooks) && ratedBooks.length >= 1 ? <Swiper
+                  spaceBetween={30}
+                  breakpoints={slideBreakPoints}
+               >
+                  {
+                     ratedBooks.map((book: any) => {
+                        return (
+                           <SwiperSlide key={book?._id}>
+
+                              <CustomBookCard book={book}></CustomBookCard>
+                           </SwiperSlide>
+                        )
+                     })
+                  }
+               </Swiper> : <div>
+                  <p>Books empty.</p>
+               </div>
             }
-         </Swiper>
-
-         {/* <!-- Books which are already read by logged user --> */}
-
-         <h1 className="text-left my-4 mb-0 headline1">Already read ({readBooks && readBooks?.length || 0}):</h1>
-         <Swiper
-            spaceBetween={50}
-            slidesPerView={3}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper) => console.log(swiper)}
-            breakpoints={{
-               0: {
-                  slidesPerView: 1,
-               },
-               400: {
-                  slidesPerView: 2,
-               },
-               639: {
-                  slidesPerView: 3,
-               },
-               865: {
-                  slidesPerView: 3
-               },
-               1000: {
-                  slidesPerView: 4
-               },
-               1500: {
-                  slidesPerView: 6
-               },
-               1700: {
-                  slidesPerView: 7
-               }
-            }}
-         >
-            {
-               Array.isArray(readBooks) && readBooks.map((book: any) => {
-                  return (
-                     <SwiperSlide key={book?._id}>
-                        <div className="row">
-                           <div className="col-12">
-                              <div className="card card-highlight">
-                                 <img src={imgSrcSet(book?.thumbnail)}
-                                    className="card-img" />
-                                 <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
-                                    <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
-                                    <p className="card-text">{book?.authors}</p>
-                                    <div className="card-rating">
-                                       <span className="star">&#9733;</span> {book?.averageRatings || 0}/10
-                                    </div>
-                                    <Link href={`/book/${book?._id}`} className="btn btn-dark mx-auto">Details</Link>
-                                    <button className="btn btn-primary" onClick={() => deleteReadCategoryBook(book?._id)}>Remove</button>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </SwiperSlide>
-                  )
-               })
-            }
-         </Swiper>
-
-
-         {/* <!-- Books which logged user wants to read --> */}
-
-         <h1 className="text-left my-4 mb-0 headline1">Want to read ({unreadBooks && unreadBooks.length || 0}):</h1>
-         <Swiper
-            spaceBetween={50}
-            slidesPerView={3}
-            onSlideChange={() => console.log('slide change')}
-            onSwiper={(swiper) => console.log(swiper)}
-            breakpoints={{
-               0: {
-                  slidesPerView: 1,
-               },
-               400: {
-                  slidesPerView: 2,
-               },
-               639: {
-                  slidesPerView: 3,
-               },
-               865: {
-                  slidesPerView: 3
-               },
-               1000: {
-                  slidesPerView: 4
-               },
-               1500: {
-                  slidesPerView: 6
-               },
-               1700: {
-                  slidesPerView: 7
-               }
-            }}
-         >
-            {
-               Array.isArray(unreadBooks) && unreadBooks.map((book: any) => {
-                  return (
-                     <SwiperSlide key={book?._id}>
-                        <div className="row">
-                           <div className="col-12">
-                              <div className="card  card-highlight">
-                                 <img src={imgSrcSet(book?.thumbnail)}
-                                    className="card-img" />
-                                 <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
-                                    <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
-                                    <p className="card-text">{book?.authors}</p>
-                                    <div className="card-rating">
-                                       <span className="star">&#9733;</span> {book?.averageRatings || 0}/10
-                                    </div>
-                                    <Link href={`/book/${book?._id}`} className="btn btn-dark mx-auto">Details</Link>
-                                    <button className="btn btn-primary" onClick={() => deleteReadCategoryBook(book?._id)}>Remove</button>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </SwiperSlide>
-                  )
-               })
-            }
-         </Swiper>
-
-         {/* <!-- Books which logged user added to database --> */}
-
-         <h1 className="text-left my-4 mb-0 headline1">
-            Added ({Array.isArray(myBooks?.totalBooksCount) ? myBooks?.totalBooksCount[0].number : 0})
-         </h1>
-         <Swiper
-            spaceBetween={30}
-            onSlideChange={(e) => slideChanged(e)}
-            onSwiper={(swiper) => console.log(swiper)}
-            breakpoints={{
-               0: {
-                  slidesPerView: 1,
-               },
-               400: {
-                  slidesPerView: 2,
-               },
-               639: {
-                  slidesPerView: 3,
-               },
-               865: {
-                  slidesPerView: 3
-               },
-               1000: {
-                  slidesPerView: 4
-               },
-               1500: {
-                  slidesPerView: 6
-               },
-               1700: {
-                  slidesPerView: 7
-               }
-            }}
-         >
-            {
-               Array.isArray(myBooks?.allBooks) && myBooks?.allBooks.map((book: any) => {
-                  return (
-                     <SwiperSlide key={book?._id}>
-                        <div className="row">
-                           <div className="col-12">
-                              <div className="card  card-highlight">
-
-                                 <img src={imgSrcSet(book?.thumbnail)}
-                                    className="card-img" />
-                                 <div className="card-body d-flex flex-column justify-content-between" style={{ wordBreak: "break-word" }}>
-                                    <h5 className="card-title">{book?.title && book?.title?.length >= 40 ? book?.title.slice(0, 40) + "..." : book?.title}</h5>
-                                    <p className="card-text">{book?.authors}</p>
-                                    <div className="card-rating">
-                                       <span className="star">&#9733;</span> {book?.averageRatings || 0}/10
-                                    </div>
-                                    <Link href={user?.role === "Editor" ? `manage-books/book/modify?id=${book?._id}` : `/mybookshelf/book/modify?id=${book?._id}`} className="btn btn-dark mx-auto">Modify</Link>
-                                 </div>
-                              </div>
-                           </div>
-                        </div>
-                     </SwiperSlide>
-                  )
-               })
-            }
-         </Swiper>
+         </div>
       </div>
    )
 })

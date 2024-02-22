@@ -11,19 +11,9 @@
    margin-top: 30px;
 }
 
-.card-highlight {
-   background-color: #89b3ca;
-   display: flex;
-   flex-direction: row;
-   align-items: stretch;
-   border-radius: 10px;
-   height: 400px;
-   overflow: hidden;
-}
 
 .card-img {
    object-fit: cover;
-   width: 50%;
    height: 100%;
    border-radius: 10px 0 0 10px;
 }

@@ -2,9 +2,9 @@
 import { useRouter } from "next/router";
 import BookModifier from "./_BookModifier";
 import Link from "next/link";
-import EditorProtectedPage from "@/Functions/EditorProtectedPage";
+import ProtectedPage from "@/Functions/ProtectedPage";
 
-export default EditorProtectedPage(function (props: any) {
+export default ProtectedPage(function (props: any) {
 
    const router = useRouter();
 

@@ -233,7 +233,12 @@ export function imgSrcSet(uri: string) {
 
 export function getDateTime(timestamp: any) {
    if (!timestamp) return "";
-   
+
    let date = new Date(timestamp);
    return `${date.toLocaleTimeString()}, ${date?.toLocaleDateString()}`;
+}
+
+
+export function titleViewer(title: string = "") {
+   return title && title?.length >= 40 ? title.slice(0, 40) + "..." : title;
 }

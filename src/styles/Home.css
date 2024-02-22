@@ -80,19 +80,17 @@
 .card-img {
   object-fit: cover;
   object-position: center;
-  width: 150px;
   height: auto;
   border-radius: 5px;
 }
 
-.card-highlight {
-  background-color: #89b3ca;
+/* .card-highlight {
   display: flex;
   flex-direction: row;
   align-items: center;
   border-radius: 10px;
   padding-left: 15px;
-}
+} */
 
 .card-highlight .card-img {
   object-fit: cover;
@@ -118,10 +116,6 @@
   font-size: 1rem;
   text-align: center;
   margin-bottom: 20px;
-}
-
-.star {
-  color: rgb(245, 189, 6);
 }
 
 .article-meta {

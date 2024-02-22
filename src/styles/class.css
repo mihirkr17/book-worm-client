@@ -81,3 +81,179 @@
    flex-direction: column;
    align-items: center;
 }
+
+/* Custom Card design  */
+
+/***************************************************************************/
+:root {
+   --headingfont: "ProximaNovaRegular";
+}
+/***************************** DEFAULTS ***************************************/
+
+.book_card__wrapper {
+   margin: auto;
+   margin-top: 9%;
+   min-height: 300px;
+   width: 100%;
+   display: flex;
+   flex-direction: row;
+   flex-wrap: nowrap;
+   border-radius: 1%;
+   background: rgb(246, 246, 246);
+   box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+}
+
+.book_card__img {
+   flex-basis: 50%;
+   background-size: cover;
+   background-position: 50% 50%;
+}
+
+.book_card__info {
+   flex-basis: 50%;
+   padding: 10px 8px;
+   position: relative;
+   background-color: #f6f6f6;
+}
+.book_card__info .title {
+   font-size: 1.3rem;
+   line-height: 1.2;
+   margin-bottom: 5%;
+   color: #202020;
+   min-height: 140px;
+}
+.book_card__info .author {
+   font-size: 0.885rem;
+   color: #8a8a8a;
+   font-style: normal;
+   min-height: 100px;
+}
+
+.book_card__img {
+   position: relative;
+}
+
+.book_card__img .stars {
+   font-size: 13px;
+   color: orange;
+   text-align: center;
+   background-color: #f6f6f6;
+   width: max-content;
+   padding: 3px 10px;
+   margin: auto;
+   position: absolute;
+   top: 0;
+   right: 0;
+   border-bottom-left-radius: 50px;
+}
+
+.book_card__info .controls {
+   margin: 0;
+   padding: 0;
+   list-style: none;
+   display: flex;
+   width: 100%;
+   overflow: hidden;
+}
+.book_card__info .controls li {
+   color: #242424;
+   text-decoration: none;
+   cursor: pointer;
+   list-style: none;
+   flex-basis: 33%;
+   flex-grow: 1;
+   display: flex;
+   font-weight: 500;
+   letter-spacing: 1px;
+   font-size: 12px;
+}
+.controls a {
+   display: block;
+   position: relative;
+   text-decoration: none;
+   margin: auto;
+   padding: 2px 1rem;
+}
+
+.controls button {
+   background-color: transparent;
+   border: unset;
+   color: inherit;
+   font-size: inherit;
+   padding: 2px 1rem;
+   position: relative;
+}
+
+.controls a::after,
+.controls button::after {
+   content: "";
+   height: 100%;
+   width: 100%;
+   position: absolute;
+   top: 0;
+   left: 0;
+   opacity: 0;
+   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+   transition: opacity 0.3s ease;
+}
+.controls a:hover::after,
+.controls button:hover::after {
+   opacity: 1;
+}
+
+/* Article Css */
+.article-recent {
+   display: flex;
+   flex-direction: column;
+   margin-bottom: 2em;
+}
+
+.subtitle {
+   font-size: 0.85rem;
+   font-weight: 700;
+   margin: 0;
+   color: #1792d2;
+   letter-spacing: 0.05em;
+   font-family: "Ubuntu Bold", sans-serif;
+}
+.article-title {
+   font-size: 1.5rem;
+}
+
+.article-read-more,
+.article-info {
+   font-size: 0.875rem;
+}
+
+.article-read-more {
+   color: #1792d2;
+   text-decoration: none;
+   font-weight: 700;
+}
+.article-read-more:hover,
+.article-read-more:focus {
+   color: #143774;
+   text-decoration: underline;
+}
+.article-info {
+   padding: 10px 0 5px 0;
+}
+
+.article-body {
+   width: 100%;
+   text-align: justify;
+}
+
+.article-recent-main {
+   order: 2;
+}
+
+.article-recent-secondary {
+   order: 1;
+}
+
+
+.article-recent-secondary img{
+   max-width: 100%;
+   display: block;
+ }

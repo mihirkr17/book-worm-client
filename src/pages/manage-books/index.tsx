@@ -1,4 +1,4 @@
-import EditorProtectedPage from '@/Functions/EditorProtectedPage';
+import ProtectedPage from '@/Functions/ProtectedPage';
 import { imgSrcSet } from '@/Functions/common';
 import { useFetch } from '@/Hooks/useFetch';
 import UploadBooksByCsvModal from '@/components/Modals/UploadBooksByCsvModal';
@@ -6,7 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-export default EditorProtectedPage(function (props:any) {
+export default ProtectedPage(function (props:any) {
    const { setPopupMsg } = props?.auth;
    const router = useRouter();
    const itemsPerPage = 12;
@@ -17,7 +17,7 @@ export default EditorProtectedPage(function (props:any) {
       sort: ""
    });
 
-   const { data, refetch }: any = useFetch(`/books?action=false&page=${currentPage}&pageSize=${itemsPerPage}&q=${filterInfo?.q || ""}&sort=${filterInfo?.sort || ""}`);
+   const { data, refetch }: any = useFetch(`/books/manage?action=false&page=${currentPage}&pageSize=${itemsPerPage}&q=${filterInfo?.q || ""}&sort=${filterInfo?.sort || ""}`);
 
    const searchedBooks = data?.data?.searchResults?.searchedBooks || [];
    const totalBooksCount = data?.data?.searchResults?.totalBooksCount[0]?.number || 0;
