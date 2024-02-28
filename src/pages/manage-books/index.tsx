@@ -1,12 +1,13 @@
 import ProtectedPage from '@/Functions/ProtectedPage';
-import { imgSrcSet } from '@/Functions/common';
+import { apiHandler, imgSrcSet } from '@/Functions/common';
 import { useFetch } from '@/Hooks/useFetch';
 import UploadBooksByCsvModal from '@/components/Modals/UploadBooksByCsvModal';
+import { API_URLS, BASE_URLS } from '@/constants/constant';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
-export default ProtectedPage(function (props:any) {
+export default ProtectedPage(function (props: any) {
    const { setPopupMsg } = props?.auth;
    const router = useRouter();
    const itemsPerPage = 12;
@@ -30,14 +31,7 @@ export default ProtectedPage(function (props:any) {
 
          if (window.confirm(`Want to delete ${bookTitle}`)) {
 
-            const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/delete/${bookId}`, {
-               method: "DELETE",
-               headers: {
-                  Authorization: `Bearer ${props?.auth?.token || ""}`
-               }
-            });
-
-            const result = await response.json();
+            const result = await apiHandler(API_URLS?.deleteBookUrl(bookId), "DELETE");
 
             if (result?.success) {
                refetch();
@@ -123,11 +117,20 @@ export default ProtectedPage(function (props:any) {
                               <td>{book?.title}</td>
                               <td>{book?.authors}</td>
                               <td>
-                                 <Link href={`/manage-books/book/modify?id=${book?._id}`} style={{ display: "inline-block" }}
-                                    className="btn btn-sm btn-info">Modify</Link>
-                                 <br />
-                                 <br />
-                                 <button type="button" className="btn btn-sm btn-danger" onClick={() => deleteBookHandler(book?._id, book?.title)}>Delete</button>
+                                 <div className='d-flex align-items-center justify-content-between'>
+                                    <button className='btn btn-sm btn-primary'
+                                       onClick={() => router.push(BASE_URLS?.bookUrl(book?._id))}>View</button>
+
+                                    <button className="btn btn-sm btn-info"
+                                       onClick={() => router.push(BASE_URLS?.bookModifyUrl(book?._id))}>
+                                       Modify
+                                    </button>
+
+                                    <button type="button" className="btn btn-sm btn-danger"
+                                       onClick={() => deleteBookHandler(book?._id, book?.title)}>
+                                       Delete
+                                    </button>
+                                 </div>
                               </td>
                            </tr>
                         )

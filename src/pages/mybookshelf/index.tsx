@@ -5,18 +5,17 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 
 // Import Swiper styles
 import 'swiper/css';
-import Link from "next/link";
 import ProtectedPage from "@/Functions/ProtectedPage";
-import { imgSrcSet, titleViewer } from "@/Functions/common";
-import { useState } from "react";
+import { apiHandler } from "@/Functions/common";
 import CustomBookCard from "@/components/Cards/CustomBookCard";
+import { API_URLS } from "@/constants/constant";
 
 export default ProtectedPage((props: any) => {
 
    const { user, setPopupMsg } = props?.auth;
+
+   // My Book Self
    const { data, refetch }: any = useFetch(`/books/mybookself`);
-
-
 
    const ratedBooks = data?.data?.ratedBooks || [];
    const readBooks = data?.data?.readBooks || [];
@@ -49,14 +48,7 @@ export default ProtectedPage((props: any) => {
 
    async function deleteReadCategoryBook(bookId: string) {
       try {
-         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/delete-read-category/book/${bookId}`, {
-            method: "DELETE",
-            headers: {
-               Authorization: `Bearer ${props?.auth?.token || ""}`
-            }
-         });
-
-         const result = await response.json();
+         const result = await apiHandler(API_URLS?.deleteReadToReadBookUrl(bookId), "DELETE");
 
          if (result?.success) {
             setPopupMsg(result?.message, "success");
@@ -74,9 +66,6 @@ export default ProtectedPage((props: any) => {
       <div className="py-2">
 
          <h1>My Book Self</h1>
-
-
-
 
          {/* <!-- Books which are already read by logged user --> */}
 

@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import React from 'react';
 
-const NavigationBar = ({ user, logout, searchTrigger }: any) => {
+const NavigationBar = ({ user, logout }: any) => {
    return (
       <div id="navbar-wrapper" style={{ paddingBottom: "100px" }}>
          <nav className="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" style={{ borderBottom: "1px solid #e3e3e3" }}>
@@ -26,9 +26,7 @@ const NavigationBar = ({ user, logout, searchTrigger }: any) => {
                      <li className="nav-item">
                         <Link className="nav-link" href="/article-listing">Articles</Link>
                      </li>
-                     <li className="nav-item">
-                        <input type="search" onChange={(e) => searchTrigger(e.target.value || "")} />
-                     </li>
+                 
                   </ul>
 
                   {

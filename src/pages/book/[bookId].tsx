@@ -1,5 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
-import { getDateTime } from '@/Functions/common';
+import { apiHandler, getDateTime } from '@/Functions/common';
+import { API_URLS, BASE_URLS } from '@/constants/constant';
 import { faFlag, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { GetServerSideProps } from 'next';
@@ -11,6 +12,8 @@ const BookDetails = (props: any) => {
    const { book, auth } = props;
    const { user, setPopupMsg, token } = auth;
 
+   const { bookId } = router?.query;
+
    // Add book Ratings
    async function handleRating(value: string) {
       try {
@@ -18,17 +21,7 @@ const BookDetails = (props: any) => {
 
          if (!user?._id) throw new Error(`Please Login`);
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/rate/${book?._id}`, {
-            method: "POST",
-            headers: {
-               Authorization: `Bearer ${token}`,
-               "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ rating: parseInt(value) })
-         });
-
-
-         const result = await response.json();
+         const result = await apiHandler(API_URLS?.bookRateUrl(book?._id), "POST", { rating: parseInt(value) });
 
          if (result?.success) {
             setPopupMsg(result?.message, "success");
@@ -56,21 +49,12 @@ const BookDetails = (props: any) => {
             throw new Error("Please add some text!");
          }
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/add-comment/${book?._id}`, {
-            method: "POST",
-            headers: {
-               Authorization: `Bearer ${token}`,
-               "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ content })
-         });
-
-         const result = await response.json();
+         const result = await apiHandler(API_URLS?.bookCommentUrl(book?._id), "POST", { content })
 
          if (result?.success) {
             setPopupMsg(result?.message, "success");
             e.target.reset();
-            router.push(`/book/${router?.query?.bookId}`);
+            router.push(BASE_URLS?.bookUrl(bookId ? bookId : ""));
          } else {
             setPopupMsg(result?.message, "danger");
          }
@@ -89,15 +73,7 @@ const BookDetails = (props: any) => {
          if (!user?._id) throw new Error(`Please Login`);
          if (!["read", "to-read"].includes(status)) throw new Error("Invalid status!");
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/action/${bookId}?status=${status}`, {
-            method: "PUT",
-            headers: {
-               Authorization: `Bearer ${token}`
-            }
-         });
-
-
-         const result = await response.json();
+         const result = await apiHandler(API_URLS?.bookReadToReadUrl(bookId), "PUT", { status })
 
          if (result?.success) {
             return setPopupMsg(result?.message, "success");
@@ -114,17 +90,10 @@ const BookDetails = (props: any) => {
    async function reportCommentHandler(commentId: string) {
       try {
 
-         if (!user?._id) throw new Error(`Please Login`);
-
-         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/comment/report/${commentId}`, {
-            method: "POST",
-            headers: {
-               Authorization: `Bearer ${token}`
-            }
-         });
+         if (!user?._id) throw new Error(`Please Login Here`);
 
 
-         const result = await response.json();
+         const result = await apiHandler(API_URLS?.bookCommentReportUrl(commentId), "POST");
 
          if (result?.success) {
             return setPopupMsg(result?.message, "success");
@@ -143,15 +112,7 @@ const BookDetails = (props: any) => {
 
          if (!user?._id) throw new Error(`Please Login`);
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/delete-own-comment/${commentId}/${bookId}`, {
-            method: "DELETE",
-            headers: {
-               Authorization: `Bearer ${token}`
-            },
-
-         });
-
-         const result = await response.json();
+         const result = await apiHandler(API_URLS?.bookDeleteOwnCommentUrl(commentId, bookId), "DELETE")
 
          if (result?.success) {
             setPopupMsg(result?.message, "success");
@@ -188,18 +149,18 @@ const BookDetails = (props: any) => {
                   {
                      ratingsPoints.map((point: number) => {
 
-                        const isChecked = book?.ratingsUsers.find((e: any) => e.userId === user?._id);
+                        const isChecked = book?.ratingUserId && book?.ratingUserId === user?._id;
+
                         return (
                            <div key={point}>
                               <label htmlFor={`${point}`}>{point}&nbsp;☆</label>
                               <input type="radio" name="rating" value={`${point}`} id={`${point}`}
-                                 checked={isChecked?.rating === point ? true : false} onChange={e => handleRating(e.target.value)} />
+                                 checked={isChecked && book?.ratingUserValue === point ? true : false} onChange={e => handleRating(e.target.value)} />
                            </div>
 
                         )
                      })
                   }
-
                </form>
 
 
@@ -207,6 +168,7 @@ const BookDetails = (props: any) => {
                <button className="btn btn-secondary w-100" onClick={() => handleReadAndToRead(book?._id, "read")}>Already read</button>
             </div>
 
+            {/* Book Details */}
             <div className="col-md-8 right-column">
                <h1 className="h1 text-center">{book?.title}</h1>
                <h2 className="h6 text-center">Author: &nbsp;{book?.authors}</h2>
@@ -221,21 +183,17 @@ const BookDetails = (props: any) => {
                <p><span className="label">Number of pages:</span><span className="value">&nbsp;{book?.numberPages}</span></p>
                <p><span className="label">Publication year:</span><span className="value">&nbsp;{book?.publishedYear}</span></p>
             </div>
-
          </div>
 
          <div className="be-comment-block mt-5">
-            <h4> Comments ({book?.comments && book?.comments.length || 0})</h4>
+            <h4>Comments ({book?.comments ? book?.comments.length : 0})</h4>
 
             {
                Array.isArray(book?.comments) && book?.comments.map((comment: any) => {
-
-
                   return (
                      <React.Fragment key={comment?._id}>
                         <div className="be-comment">
                            <div className="be-comment-content">
-
                               <div >
                                  <span className="be-comment-name">
                                     <a>{comment?.author}</a>
@@ -244,8 +202,6 @@ const BookDetails = (props: any) => {
                                     <i className="fa fa-clock-o"></i>
                                     {getDateTime(comment?.commentCreatedAt)}
                                  </span>
-
-
                               </div>
                               <p className="be-comment-text">
                                  {
@@ -263,20 +219,18 @@ const BookDetails = (props: any) => {
                                        <FontAwesomeIcon icon={faTrashAlt}></FontAwesomeIcon>
                                     </button>
                                  }
-
                               </span>
                            </div>
                         </div>
-
                         <hr />
                      </React.Fragment>
                   )
                })
             }
-            <br /><br />
+            <br />
 
             {
-               user?.role && <>
+               user?._id && <div className='mt-5'>
                   <h6>Write Comment</h6>
                   <form className="form-block" onSubmit={handleBookComment}>
                      <div className="row">
@@ -298,7 +252,7 @@ const BookDetails = (props: any) => {
                         </div>
                      </div>
                   </form>
-               </>
+               </div>
             }
          </div>
       </div>
@@ -307,16 +261,22 @@ const BookDetails = (props: any) => {
    );
 };
 
-export const getServerSideProps = (async (req: any) => {
+export const getServerSideProps = (async (context: any) => {
    try {
       // Fetch data from external API
-      const { bookId } = req?.params;
+      const { bookId } = context?.params;
+
+      const appToken = context?.req?.cookies?.appSession ? context?.req.cookies.appSession : "";
+
       const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/single/${bookId}`, {
-         method: "GET"
+         method: "GET",
+         headers: {
+            Authorization: `Bearer ${appToken}`
+         }
       })
       const data = await res.json()
       // Pass data to the page via props
-      return { props: { book: data?.data?.book } }
+      return { props: { book: data?.data?.book || {} } }
    } catch (error: any) {
       console.log(error?.message);
       return { props: { book: {} } }

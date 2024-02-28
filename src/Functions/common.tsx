@@ -179,12 +179,12 @@ export async function apiHandler(url = "", method = "GET", body = {}) {
    const cookie: any = window && CookieParser();
 
    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_S_BASE_URL}api/v1${url}`, {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1${url}`, {
          method,
          credentials: "include",
          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${cookie?.appSession ?? ""}`
+            ...["POST", 'PUT', "PATCH", "UPDATE"].includes(method) && { "Content-Type": "application/json" },
+            Authorization: `Bearer ${cookie?.appSession || ""}`
          },
          ...["POST", 'PUT', "PATCH", "UPDATE"].includes(method) && { body: JSON.stringify(body) }
       });
@@ -198,8 +198,8 @@ export async function apiHandler(url = "", method = "GET", body = {}) {
       if (result) {
          return result;
       }
-   } catch (error) {
-      return error;
+   } catch (error: any) {
+      throw new Error(`Error In Api Handler : ${error?.message}`);
    }
 }
 
