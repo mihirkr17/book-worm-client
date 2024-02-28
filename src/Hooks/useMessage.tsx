@@ -22,7 +22,20 @@ export default function useMessage() {
       color: "green",
       fontWeight: "normal",
       fontSize: "13px",
-      letterSpacing: "0.4px"
+      letterSpacing: "0.4px",
+      wordBreak: "break-word"
+   }
+
+   const buttonStyle: React.CSSProperties = {
+      backgroundColor: "red",
+      color: "whitesmoke",
+      padding: "0 8px",
+      outline: "unset",
+      border: "unset",
+      fontSize: "12px",
+      borderRadius: "4px",
+      alignSelf: "end",
+      marginBottom: "5px"
    }
 
    const setMessage = (message = "", types = "success") => {
@@ -32,17 +45,7 @@ export default function useMessage() {
       setMsg(
          <div style={defaultStyle}>
             <div style={{ display: "flex", alignItems: "center", flexDirection: "column" }}>
-               <button onClick={() => setMsg("")} style={{
-                  backgroundColor: "red",
-                  color: "whitesmoke",
-                  padding: "0 8px",
-                  outline: "unset",
-                  border: "unset",
-                  fontSize: "12px",
-                  borderRadius: "4px",
-                  alignSelf: "end",
-                  marginBottom: "5px"
-               }}>X</button>
+               <button onClick={() => setMsg("")} style={buttonStyle}>X</button>
                <p style={textStyle}>
                   {message}
                </p>

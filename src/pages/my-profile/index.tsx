@@ -1,4 +1,6 @@
 import ProtectedPage from "@/Functions/ProtectedPage";
+import { apiHandler } from "@/Functions/common";
+import { API_URLS } from "@/constants/constant";
 
 export default ProtectedPage((props: any) => {
 
@@ -12,17 +14,8 @@ export default ProtectedPage((props: any) => {
 
          const oldPassword = e.target.oldPassword.value;
          const newPassword = e.target.newPassword.value;
-
-         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/auth/credential/change-password`, {
-            method: "POST",
-            headers: {
-               Authorization: `Bearer ${props?.auth?.token}`,
-               "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ oldPassword, newPassword })
-         });
-
-         const result = await response.json();
+         
+         const result = await apiHandler(API_URLS?.pwdChangeUrl, "POST", { oldPassword, newPassword });
 
          if (result?.success) {
             setPopupMsg(result?.message, "success");

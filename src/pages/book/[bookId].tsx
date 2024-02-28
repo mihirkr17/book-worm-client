@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import { apiHandler, getDateTime } from '@/Functions/common';
-import { API_URLS, BASE_URLS } from '@/constants/constant';
+import { API_URLS, BASE_URLS, SERVER_URI } from '@/constants/constant';
 import { faFlag, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { GetServerSideProps } from 'next';
@@ -268,7 +268,7 @@ export const getServerSideProps = (async (context: any) => {
 
       const appToken = context?.req?.cookies?.appSession ? context?.req.cookies.appSession : "";
 
-      const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/single/${bookId}`, {
+      const res = await fetch(`${SERVER_URI}api/v1/books/single/${bookId}`, {
          method: "GET",
          headers: {
             Authorization: `Bearer ${appToken}`

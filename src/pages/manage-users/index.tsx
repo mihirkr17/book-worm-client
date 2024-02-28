@@ -1,6 +1,7 @@
 import EditorProtectedPage from '@/Functions/EditorProtectedPage';
-import { imgSrcSet } from '@/Functions/common';
+import { apiHandler, imgSrcSet } from '@/Functions/common';
 import { useFetch } from '@/Hooks/useFetch';
+import { API_URLS } from '@/constants/constant';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -22,14 +23,8 @@ export default EditorProtectedPage(function (props: any) {
          if (!userId) throw new Error(`Required article id!`);
 
          if (window.confirm(`Want to delete ${nickName}`)) {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/users/delete-user/${userId}`, {
-               method: "DELETE",
-               headers: {
-                  Authorization: `Bearer ${props?.auth?.token}`
-               }
-            });
 
-            const result = await response.json();
+            const result = await apiHandler(API_URLS.userDeleteUrl(userId), "DELETE");
 
             if (result?.success) {
                refetch();

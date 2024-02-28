@@ -1,5 +1,6 @@
-import { imgSrcSet } from '@/Functions/common';
+import { apiHandler, imgSrcSet } from '@/Functions/common';
 import { useFetch } from '@/Hooks/useFetch';
+import { API_URLS } from '@/constants/constant';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -19,8 +20,6 @@ const ArticleModifier = ({ articleId, type, auth }: any) => {
    const article = data?.data?.article;
 
    const [description, setDescription] = useState<string>(article?.content || "");
-
-
 
    // Image pre-viewer
    function previewImage(file: any, setState: any) {
@@ -50,27 +49,18 @@ const ArticleModifier = ({ articleId, type, auth }: any) => {
 
          formData.append("content", description);
 
-         let uri: string = `api/v1/articles/create`;
+         let uri: string = API_URLS.createArticleUrl;
          let method = "POST";
          let createStatus = false;
 
          if (type === "modify" && articleId) {
-            uri = `api/v1/articles/modify/${articleId}`;
+            uri = API_URLS.modifyArticleUrl(articleId);
             method = "PUT";
          } else {
             createStatus = true;
          }
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}${uri}`, {
-            method: method,
-            headers: {
-               Authorization: `Bearer ${auth?.token || ""}`
-            },
-            body: formData
-         });
-
-
-         const result = await response.json();
+         const result = await apiHandler(uri, method, formData, "FORM_DATA");
 
          if (result?.success) {
             setPopupMsg(result?.message, "success");

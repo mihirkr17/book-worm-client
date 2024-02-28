@@ -1,8 +1,10 @@
+import { apiHandler } from '@/Functions/common';
+import { API_URLS, BASE_URLS } from '@/constants/constant';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
 
-const SignUp = (props:any) => {
+const SignUp = (props: any) => {
    const { user, setPopupMsg } = props?.auth;
    const router = useRouter();
 
@@ -24,20 +26,13 @@ const SignUp = (props:any) => {
          const email = e.target.email.value;
          const password = e.target.password.value;
 
-         const response: any = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/auth/user/signup`, {
-            method: "POST",
-            headers: {
-               "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-               firstName, lastName, email, password
-            })
-         });
+         const result = await apiHandler(API_URLS.userSignUpUrl, "POST", {
+            firstName, lastName, email, password
+         }); // response.json();
 
-         const result = await response.json();
-
-         if (response?.ok) {
+         if (result?.success) {
             setPopupMsg(result?.message, "success");
+            router.push(BASE_URLS?.loginPage);
             return;
          }
 

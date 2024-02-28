@@ -1,4 +1,5 @@
 import { getDateTime, imgSrcSet } from '@/Functions/common';
+import { SERVER_URI } from '@/constants/constant';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -48,7 +49,7 @@ export const getServerSideProps = (async (req: any) => {
    try {
       // Fetch data from external API
       const { articleId } = req?.params;
-      const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/articles/single/${articleId}`, {
+      const res = await fetch(`${SERVER_URI}api/v1/articles/single/${articleId}`, {
          method: "GET"
       })
       const data = await res.json()

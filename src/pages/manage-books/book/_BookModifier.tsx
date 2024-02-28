@@ -1,6 +1,7 @@
-import { imgSrcSet } from '@/Functions/common';
+import { apiHandler, imgSrcSet } from '@/Functions/common';
 import { useFetch } from '@/Hooks/useFetch';
 import { publishedYear } from '@/assets/fakeData1';
+import { API_URLS } from '@/constants/constant';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
@@ -42,27 +43,20 @@ const BookModifier = ({ bookId, type, auth }: any) => {
 
          const formData = new FormData(e.target);
 
-         let uri: string = `api/v1/books/create-book`;
+
+         let uri: string = API_URLS.createBookUrl;
          let method = "POST";
          let createStatus = false;
 
          if (type === "modify" && bookId) {
-            uri = `api/v1/books/modify/${bookId}`;
+            uri = API_URLS.modifyBookUrl(bookId);
             method = "PUT";
          } else {
             createStatus = true;
          }
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}${uri}`, {
-            method: method,
-            headers: {
-               Authorization: `Bearer ${auth?.token || ""}`
-            },
-            body: formData
-         });
 
-
-         const result = await response.json();
+         const result = await apiHandler(uri, method, formData, "FORM_DATA");
 
          if (result?.success) {
             setPopupMsg(result?.message, "success");

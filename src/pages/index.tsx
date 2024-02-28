@@ -11,6 +11,7 @@ import { getDateTime, imgSrcSet, titleViewer } from "@/Functions/common";
 import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import CustomBookCard from "@/components/Cards/CustomBookCard";
+import { SERVER_URI } from "@/constants/constant";
 
 function Home({ highestRatedBooks, newestBooks, article }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
@@ -129,7 +130,7 @@ function Home({ highestRatedBooks, newestBooks, article }: InferGetServerSidePro
 export async function getServerSideProps() {
   // Fetch data from external API
   try {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/overview`, {
+    const res = await fetch(`${SERVER_URI}api/v1/overview`, {
       method: "GET"
     })
     const data = await res.json()

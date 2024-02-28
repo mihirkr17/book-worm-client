@@ -1,5 +1,6 @@
 
-import { addCookie } from '@/Functions/common';
+import { addCookie, apiHandler } from '@/Functions/common';
+import { API_URLS, BASE_URLS } from '@/constants/constant';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect } from 'react';
@@ -22,21 +23,10 @@ const Login = (props: any) => {
          const email = e.target.email.value;
          const password = e.target.password.value;
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/auth/login`, {
-            method: "POST",
-            headers: {
-               "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-               email, password
-            })
-         });
-
-         const result = await response.json();
+         const result = await apiHandler(API_URLS?.loginUrl, "POST", { email, password });
 
          if (result?.success) {
             const { data, message, success } = result;
-
 
             if (data?.accessToken) {
                let cookieResult = addCookie("appSession", data?.accessToken, 16);
@@ -44,7 +34,7 @@ const Login = (props: any) => {
                if (!cookieResult)
                   return setPopupMsg("Failed to set authentication !", "danger");
 
-               initialLoader() && router.push("/");
+               initialLoader() && router.push(BASE_URLS?.root);
                return;
             }
 

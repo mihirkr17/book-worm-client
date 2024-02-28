@@ -1,5 +1,7 @@
 import EditorProtectedPage from '@/Functions/EditorProtectedPage';
+import { apiHandler } from '@/Functions/common';
 import { useFetch } from '@/Hooks/useFetch';
+import { API_URLS } from '@/constants/constant';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -21,14 +23,8 @@ export default EditorProtectedPage(function (props: any) {
          if (!commentId) throw new Error(`Required comment id!`);
 
          if (window.confirm(`Want to delete this comment`)) {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/comment/delete-comment/${commentId}`, {
-               method: "DELETE",
-               headers: {
-                  Authorization: `Bearer ${props?.auth?.token || ""}`
-               }
-            });
 
-            const result = await response.json();
+            const result = await apiHandler(API_URLS.commentDeleteUrl(commentId), "DELETE");
 
             if (result?.success) {
                refetch();

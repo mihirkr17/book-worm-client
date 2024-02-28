@@ -1,6 +1,7 @@
 /* eslint-disable react/no-unescaped-entities */
 import { getDateTime, imgSrcSet } from '@/Functions/common';
 import ArticleCard from '@/components/Cards/ArticleCard';
+import { SERVER_URI } from '@/constants/constant';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
@@ -133,7 +134,7 @@ export const getServerSideProps = (async (req: any) => {
    try {
       // Fetch data from external API
       const { page, limit, q } = req?.query;
-      const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/articles/?page=${page || 1}&limit=${limit || 10}&q=${q || ""}`, {
+      const res = await fetch(`${SERVER_URI}api/v1/articles/?page=${page || 1}&limit=${limit || 10}&q=${q || ""}`, {
          method: "GET"
       })
       const data = await res.json()

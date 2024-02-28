@@ -1,10 +1,9 @@
-import { imgSrcSet } from '@/Functions/common';
 import { publishedYear } from '@/assets/fakeData1';
 import CustomBookCard from '@/components/Cards/CustomBookCard';
+import { SERVER_URI } from '@/constants/constant';
 import { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 const BookListingIndex = ({ searchedBooks, totalBooksCount, allCategories }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
 
@@ -111,9 +110,9 @@ const BookListingIndex = ({ searchedBooks, totalBooksCount, allCategories }: Inf
                Array.isArray(searchedBooks) && searchedBooks.length >= 1 ? searchedBooks.map((book: any) => {
                   return (
 
-                    
+
                      <div className="col" key={book?._id}>
-                         <CustomBookCard book={book}></CustomBookCard>
+                        <CustomBookCard book={book}></CustomBookCard>
                      </div>
                   )
                }) : <div className='col'>
@@ -170,7 +169,7 @@ export const getServerSideProps = (async (req: any) => {
    try {
       // Fetch data from external API
       const { page, limit, sort, year, ctg, q } = req?.query;
-      const res = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || 'http://localhost:5000/'}api/v1/books?action=false&page=${page || 1}&pageSize=${limit || 12}&sort=${sort || ""}&year=${year || ""}&ctg=${ctg || ""}&q=${q || ""}`, {
+      const res = await fetch(`${SERVER_URI}api/v1/books?action=false&page=${page || 1}&pageSize=${limit || 12}&sort=${sort || ""}&year=${year || ""}&ctg=${ctg || ""}&q=${q || ""}`, {
          method: "GET"
       })
       const data = await res.json()

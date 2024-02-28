@@ -1,12 +1,15 @@
 
+import { apiHandler, imagePreviewer } from '@/Functions/common';
+import { API_URLS, BASE_URLS } from '@/constants/constant';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const EditorSignUp = (props: any) => {
 
    const { user, setPopupMsg } = props?.auth;
    const router = useRouter();
+   const [avatarPreview, setAvatarPreview] = useState("");
 
    useEffect(() => {
       if (user?.role || user?._id) {
@@ -21,25 +24,13 @@ const EditorSignUp = (props: any) => {
 
          e.preventDefault();
 
-         const firstName = e.target.firstName.value;
-         const lastName = e.target.lastName.value;
-         const email = e.target.email.value;
-         const password = e.target.password.value;
+         const formData = new FormData(e.target);
 
-         const response: any = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/auth/editor/signup`, {
-            method: "POST",
-            headers: {
-               "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-               firstName, lastName, email, password
-            })
-         });
+         const result = await apiHandler(API_URLS?.editorSignUpUrl, "POST", formData, "FORM_DATA");
 
-         const result = await response.json();
-
-         if (response?.ok) {
+         if (result?.success) {
             setPopupMsg(result?.message, "success");
+            router.push(BASE_URLS?.loginPage)
             return;
          }
 
@@ -50,6 +41,35 @@ const EditorSignUp = (props: any) => {
       }
    }
 
+
+   const imgBoxStyle: any = {
+      width: "150px",
+      height: "150px",
+      position: "relative",
+      border: "1px dashed #ababab",
+      textAlign: "center"
+   }
+
+   const imgStyle: any = {
+      width: "100%",
+      height: "100%",
+      objectFit: "cover"
+   }
+
+   const fileStyle: any = {
+      opacity: 0,
+      width: "100%",
+      height: "100%",
+      position: "absolute",
+      top: 0,
+      left: 0
+   }
+
+   const spStyle = {
+      lineHeight: "5",
+      color: "gray"
+   }
+
    return (
       <div className="container">
          <div className="row">
@@ -57,7 +77,7 @@ const EditorSignUp = (props: any) => {
             <div className='col-md-5 mx-auto'>
 
                <h1 className="text-center headline pb-4">Sign Up To Editor</h1>
-               <form onSubmit={handleSignUp}>
+               <form onSubmit={handleSignUp} encType='multipart/form-data'>
                   <div className="row">
                      <div className="col-md-12 mb-3">
                         <label htmlFor="firstName" className='form-label'>First name</label>
@@ -78,6 +98,31 @@ const EditorSignUp = (props: any) => {
                         <label htmlFor="password" className='form-label'>Password</label>
                         <input type="password" name='password' className="form-control" id="password" required />
                      </div>
+
+                     <div className="col-12 mb-3">
+                        <label htmlFor="avatar" className='form-label'>Avatar</label>
+                        <div style={imgBoxStyle}>
+                           {
+                              avatarPreview ?
+                                 <img src={avatarPreview || ""}
+                                    alt=""
+                                    srcSet={avatarPreview || ""}
+                                    style={imgStyle}
+                                 /> : <span style={spStyle}>Upload Avatar</span>
+                           }
+
+                           <input
+                              className="form-control form-control-sm"
+                              type="file"
+                              name="avatar"
+                              id="avatar"
+                              accept=".jpeg, .jpg, .png, .gif"
+                              onChange={(e: any) => imagePreviewer(e.target.files[0], setAvatarPreview, 400)}
+                              style={fileStyle}
+                           />
+                        </div>
+                     </div>
+
                      <div className="col-md-12">
                         <div className="text-center">
                            <button type="submit" className="btn btn-dark w-100" >Sign up</button>

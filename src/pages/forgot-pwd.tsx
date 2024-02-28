@@ -1,3 +1,5 @@
+import { apiHandler } from "@/Functions/common";
+import { API_URLS, BASE_URLS } from "@/constants/constant";
 import { useRouter } from "next/router";
 import { useState } from "react";
 
@@ -20,15 +22,7 @@ export default function ForgotPassword({ auth }: any) {
 
          if (!email) throw new Error("Required email address!");
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/users/credential/check-account`, {
-            method: "POST",
-            headers: {
-               "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ email })
-         });
-
-         const result = await response.json();
+         const result = await apiHandler(API_URLS?.checkAccUrl, "POST", { email });
 
          if (result?.success) {
             setPopupMsg(result?.message, "success");
@@ -53,19 +47,11 @@ export default function ForgotPassword({ auth }: any) {
 
          const newPassword = e.target.newPassword.value;
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/auth/credential/reset-password`, {
-            method: "PUT",
-            headers: {
-               "Content-Type": "application/json"
-            },
-            body: JSON.stringify({ email, newPassword })
-         });
-
-         const result = await response.json();
+         const result = await apiHandler(API_URLS?.resetPwdUrl, "PUT", { email, newPassword });
 
          if (result?.success) {
             setPopupMsg(result?.message, "success");
-            router.push("/login");
+            router.push(BASE_URLS?.loginPage);
          } else {
             setPopupMsg(result?.message, "danger");
          }

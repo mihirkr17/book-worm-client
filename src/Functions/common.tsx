@@ -1,3 +1,4 @@
+import { SERVER_URI } from "@/constants/constant";
 import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -174,19 +175,27 @@ export const calcTime = (iso: string, offset: number) => {
 }
 
 // global api handler
-export async function apiHandler(url = "", method = "GET", body = {}) {
+export async function apiHandler(url = "", method = "GET", body = {}, type = "JSON") {
 
    const cookie: any = window && CookieParser();
 
    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1${url}`, {
+      let bodyType: any = JSON.stringify(body);
+      let contentType: any = { "Content-Type": "application/json" };
+
+      if (type === "FORM_DATA") {
+         bodyType = body;
+         contentType = undefined;
+      }
+
+      const response = await fetch(`${SERVER_URI}api/v1${url}`, {
          method,
          credentials: "include",
          headers: {
-            ...["POST", 'PUT', "PATCH", "UPDATE"].includes(method) && { "Content-Type": "application/json" },
+            ...["POST", 'PUT', "PATCH", "UPDATE"].includes(method) && contentType,
             Authorization: `Bearer ${cookie?.appSession || ""}`
          },
-         ...["POST", 'PUT', "PATCH", "UPDATE"].includes(method) && { body: JSON.stringify(body) }
+         ...["POST", 'PUT', "PATCH", "UPDATE"].includes(method) && { body: bodyType }
       });
 
       if (response.status === 401) {
@@ -226,7 +235,7 @@ export function imgSrcSet(uri: string) {
    if (isPure) {
       return uri;
    } else {
-      return `${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}${uri}`;
+      return `${SERVER_URI}${uri}`;
    }
 }
 
@@ -241,4 +250,23 @@ export function getDateTime(timestamp: any) {
 
 export function titleViewer(title: string = "") {
    return title && title?.length >= 40 ? title.slice(0, 40) + "..." : title;
+}
+
+
+export function imagePreviewer(file: any, setState: any, targetSize = 800) {
+
+   const fileReader = new FileReader();
+
+   fileReader.onload = (event: any) => {
+
+      if ((file?.size / 1024) > targetSize) {
+         setState("");
+         return window.alert(`File size must be ${targetSize}KB`);
+      }
+
+      const src = event.target.result;
+      setState(src);
+   };
+
+   fileReader.readAsDataURL(file);
 }

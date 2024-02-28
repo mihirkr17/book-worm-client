@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import { CookieParser, deleteAuth } from "@/Functions/common";
-import { useRouter } from "next/router";
 import useMessage from "@/Hooks/useMessage";
+import { SERVER_URI } from "@/constants/constant";
 
 type authContextType = {
    user?: any;
@@ -37,6 +37,7 @@ export default function AuthProvider({
    const { msg, setMessage } = useMessage();
    const [token, setToken] = useState<string>("");
 
+
    useEffect(() => {
       const authRefetch = async () => {
          try {
@@ -48,7 +49,7 @@ export default function AuthProvider({
 
             setToken(cookie?.appSession);
             setAuthLoading(true);
-            const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/users/profile`, {
+            const response = await fetch(`${SERVER_URI}api/v1/users/profile`, {
                credentials: 'include',
                method: "GET",
                headers: {

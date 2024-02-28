@@ -1,4 +1,6 @@
 
+import { apiHandler } from '@/Functions/common';
+import { API_URLS } from '@/constants/constant';
 import React from 'react';
 
 
@@ -16,15 +18,7 @@ const UploadBooksByCsvModal = ({ auth }: any) => {
 
          const formData = new FormData(e.target);
 
-         const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1/books/add-book-by-csv`, {
-            method: "POST",
-            headers: {
-               Authorization: `Bearer ${auth?.token || ""}`
-            },
-            body: formData
-         });
-
-         const result = await response.json();
+         const result = await apiHandler(API_URLS.addBookByCsvUrl, "POST", formData, "FORM_DATA"); // response.json();
 
          window.alert(result?.message);
 

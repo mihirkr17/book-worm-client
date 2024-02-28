@@ -1,4 +1,5 @@
 import { CookieParser, deleteAuth } from "@/Functions/common";
+import { SERVER_URI } from "@/constants/constant";
 import { useEffect, useState } from "react";
 
 export const useFetch = (url: string) => {
@@ -20,7 +21,7 @@ export const useFetch = (url: string) => {
 
                setLoading(true);
 
-               const response = await fetch(`${process.env.NEXT_PUBLIC_VERCEL_SERVER_URL}api/v1${url}`, {
+               const response = await fetch(`${SERVER_URI}api/v1${url}`, {
                   credentials: 'include',
                   method: "GET",
                   headers: {
