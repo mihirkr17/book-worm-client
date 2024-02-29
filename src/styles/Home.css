@@ -38,6 +38,8 @@
 .card-highlight2 .card-img2 {
   object-fit: cover;
   max-width: 80%;
+  max-height: 400px;
+  min-height: 350px;
   margin: auto;
 }
 

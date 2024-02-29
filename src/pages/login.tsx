@@ -7,7 +7,7 @@ import React, { useEffect } from 'react';
 
 const Login = (props: any) => {
    const router = useRouter();
-   const { initialLoader, user, setPopupMsg } = props?.auth;
+   const { authRefetch, user, setPopupMsg } = props?.auth;
 
 
    useEffect(() => {
@@ -34,7 +34,7 @@ const Login = (props: any) => {
                if (!cookieResult)
                   return setPopupMsg("Failed to set authentication !", "danger");
 
-               initialLoader() && router.push(BASE_URLS?.root);
+               authRefetch() && router.push(BASE_URLS?.root);
                return;
             }
 

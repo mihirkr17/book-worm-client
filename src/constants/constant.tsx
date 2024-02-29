@@ -1,5 +1,10 @@
 export const SERVER_URI = process.env.NEXT_PUBLIC_VERCEL_SERVER_URL || "";
 
+export const ROLES = {
+   user: "User",
+   editor: "Editor"
+}
+
 export const BASE_URLS = {
    root: "/",
    bookUrl: function (bookId: any = "") {

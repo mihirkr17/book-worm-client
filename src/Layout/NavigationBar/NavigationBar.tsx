@@ -1,3 +1,6 @@
+import { ROLES } from '@/constants/constant';
+import { faUserCircle } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Link from 'next/link';
 import React from 'react';
 
@@ -30,9 +33,9 @@ const NavigationBar = ({ user, logout }: any) => {
                   </ul>
 
                   {
-                     user?.role === "User" || user?.role === "Editor" ? <div className="nav-item dropdown">
+                     user?.role === ROLES?.user || user?.role === ROLES?.editor ? <div className="nav-item dropdown">
                         <a className="nav-link dropdown-toggle ms-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                           {user?.firstName}
+                           <FontAwesomeIcon icon={faUserCircle} />
                         </a>
                         <ul className="dropdown-menu dropdown-menu-lg-end">
                            <li>

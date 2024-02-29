@@ -252,8 +252,13 @@
    order: 1;
 }
 
-
-.article-recent-secondary img{
+.article-recent-secondary img {
    max-width: 100%;
    display: block;
- }
+}
+
+.custom_label {
+   font-size: 13px;
+   letter-spacing: 0.3px;
+   font-weight: normal;
+}

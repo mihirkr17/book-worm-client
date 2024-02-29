@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { jwtDecode } from "jwt-decode";
 import { CookieParser, deleteAuth } from "@/Functions/common";
 import useMessage from "@/Hooks/useMessage";
 import { SERVER_URI } from "@/constants/constant";
@@ -7,7 +6,7 @@ import { SERVER_URI } from "@/constants/constant";
 type authContextType = {
    user?: any;
    logout: () => void;
-   initialLoader: any;
+   authRefetch: any;
    authLoading: boolean;
    setPopupMsg: any;
    token: string;
@@ -18,7 +17,7 @@ const authContextDefaultValues: authContextType = {
    user: {},
    token: "",
    logout: () => { },
-   initialLoader: () => { },
+   authRefetch: () => { },
    authLoading: false,
    setPopupMsg: () => { }
 };
@@ -31,15 +30,15 @@ export default function AuthProvider({
    children: React.ReactNode
 }) {
    const [user, setUserInfo] = useState<any>({});
-   const [authLoading, setAuthLoading] = useState(true);
-   const [authErr, setAuthErr] = useState();
-   const [ref, setRef] = useState(false);
+   const [authLoading, setAuthLoading] = useState<boolean>(true);
+   const [authErr, setAuthErr] = useState<string | undefined>();
+   const [ref, setRef] = useState<boolean>(false);
    const { msg, setMessage } = useMessage();
    const [token, setToken] = useState<string>("");
 
 
    useEffect(() => {
-      const authRefetch = async () => {
+      const authData = setTimeout(async () => {
          try {
             const cookie: any = CookieParser();
 
@@ -49,7 +48,7 @@ export default function AuthProvider({
 
             setToken(cookie?.appSession);
             setAuthLoading(true);
-            const response = await fetch(`${SERVER_URI}api/v1/users/profile`, {
+            const response = await fetch(`${SERVER_URI}api/v1/users/persistence`, {
                credentials: 'include',
                method: "GET",
                headers: {
@@ -65,7 +64,6 @@ export default function AuthProvider({
 
             const { success, data } = await response.json();
 
-
             if (success && data) {
                const { profile } = data;
                setAuthLoading(false);
@@ -76,15 +74,12 @@ export default function AuthProvider({
          } finally {
             setAuthLoading(false);
          }
-      };
-
-      const authData = setTimeout(authRefetch, 0)
+      }, 0)
 
       return () => clearTimeout(authData);
-
    }, [ref]);
 
-   const initialLoader = () => setRef(e => !e);
+   const authRefetch = () => setRef(e => !e);
 
    const logout = () => deleteAuth();
 
@@ -92,7 +87,7 @@ export default function AuthProvider({
 
    return (
       <AuthContext.Provider value={{
-         user, logout, initialLoader, authLoading, setPopupMsg, token
+         user, logout, authRefetch, authLoading, setPopupMsg, token
       }}>
          {msg}
          {children}

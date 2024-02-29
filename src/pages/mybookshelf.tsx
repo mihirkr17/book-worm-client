@@ -15,7 +15,7 @@ export default ProtectedPage((props: any) => {
    const { user, setPopupMsg } = props?.auth;
 
    // My Book Self
-   const { data, refetch }: any = useFetch(`/books/mybookself`);
+   const { data, refetch }: any = useFetch(`/books/mybookshelf`);
 
    const ratedBooks = data?.data?.ratedBooks || [];
    const readBooks = data?.data?.readBooks || [];

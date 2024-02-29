@@ -5,14 +5,17 @@ import { faFlag, faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useState } from 'react';
+import CommentModal from './CommentModal';
 
 const BookDetails = (props: any) => {
    const router = useRouter();
    const { book, auth } = props;
-   const { user, setPopupMsg, token } = auth;
-
+   const { user, setPopupMsg } = auth;
    const { bookId } = router?.query;
+   const totalCommentsCount = Array.isArray(book?.totalCommentsCount) ? book?.totalCommentsCount[0]?.number || 0 : 0;
+   const commentsAll = book?.commentsAll || [];
+   const [showComments, setShowComments] = useState([]);
 
    // Add book Ratings
    async function handleRating(value: string) {
@@ -130,6 +133,20 @@ const BookDetails = (props: any) => {
       1, 2, 3, 4, 5, 6, 7, 8, 9, 10
    ]
 
+   async function showAllComments(bookId: string) {
+      try {
+         if (!bookId) throw new Error("Required book id!");
+         const result = await apiHandler(`/books/show-all-comments/${bookId}`, "GET");
+
+         if (result?.success) {
+            setShowComments(result?.data?.comments);
+         }
+
+      } catch (error: any) {
+         setPopupMsg(error?.message, "danger");
+      }
+   }
+
    return (
 
       <div className="mt-4">
@@ -186,17 +203,17 @@ const BookDetails = (props: any) => {
          </div>
 
          <div className="be-comment-block mt-5">
-            <h4>Comments ({book?.comments ? book?.comments.length : 0})</h4>
+            <h4>Comments ({totalCommentsCount})</h4>
 
             {
-               Array.isArray(book?.comments) && book?.comments.map((comment: any) => {
+               commentsAll.map((comment: any) => {
                   return (
                      <React.Fragment key={comment?._id}>
                         <div className="be-comment">
                            <div className="be-comment-content">
                               <div >
                                  <span className="be-comment-name">
-                                    <a>{comment?.author}</a>
+                                    <a>{comment?.commentAuthorName}</a>
                                  </span>
                                  <span className="be-comment-time">
                                     <i className="fa fa-clock-o"></i>
@@ -228,6 +245,33 @@ const BookDetails = (props: any) => {
                })
             }
             <br />
+            {
+               totalCommentsCount > commentsAll.length && <div>
+                  <button
+                     data-bs-toggle="modal"
+                     data-bs-target="#showAllCommentsModal"
+                     style={{
+                        background: "transparent",
+                        border: "unset",
+                        color: "black",
+                        outline: "unset",
+                        fontSize: "13px"
+                     }} onClick={() => showAllComments(book?._id)}>
+                     Show All Comments
+                  </button>
+
+                  {
+                     <CommentModal
+                        comments={showComments}
+                        user={user || {}}
+                        reportCommentHandler={reportCommentHandler}
+                        bookId={book?._id}
+                        handleDeleteOwnComment={handleDeleteOwnComment}
+                     ></CommentModal>
+                  }
+
+               </div>
+            }
 
             {
                user?._id && <div className='mt-5'>
