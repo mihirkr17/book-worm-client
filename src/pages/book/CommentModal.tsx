@@ -19,7 +19,7 @@ const CommentModal = ({ comments, reportCommentHandler, handleDeleteOwnComment, 
 
 
                      {
-                        comments.map((comment: any) => {
+                        Array.isArray(comments) && comments.map((comment: any) => {
                            return (
                               <React.Fragment key={comment?._id}>
                                  <div className="be-comment">
