@@ -1,7 +1,7 @@
-import { apiHandler, imgSrcSet } from '@/Functions/common';
+import { apiHandler, imagePreviewer, imgSrcSet } from '@/Functions/common';
 import { useFetch } from '@/Hooks/useFetch';
 import { publishedYear } from '@/assets/fakeData1';
-import { API_URLS } from '@/constants/constant';
+import { API_URLS, BOOK_CATEGORIES } from '@/constants/constant';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
@@ -15,26 +15,7 @@ const BookModifier = ({ bookId, type, auth }: any) => {
 
    const { data }: any = useFetch(bookId && `/books/single/${bookId}`);
 
-   const book = data?.data?.book;
-
-   // Image pre-viewer
-   function previewImage(file: any, setState: any) {
-
-      const fileReader = new FileReader();
-
-      fileReader.onload = (event: any) => {
-
-         if ((file?.size / 1024) > 800) {
-            setState("");
-            return window.alert("File size must be 400KB");
-         }
-
-         const src = event.target.result;
-         setState(src);
-      };
-
-      fileReader.readAsDataURL(file);
-   }
+   const book = data?.data?.book || {};
 
    async function handleBook(e: any) {
       try {
@@ -100,21 +81,6 @@ const BookModifier = ({ bookId, type, auth }: any) => {
       lineHeight: "5",
       color: "gray"
    }
-
-   const BOOK_CATEGORIES = [
-      "Fiction",
-      "Juvenile Fiction",
-      "Biography & Autobiography",
-      "History",
-      "Drama",
-      "Religion",
-      "Sports & Recreation",
-      "Travel",
-      "Science",
-      "Philosophy",
-      "Psychology",
-      "American fiction"
-   ]
 
 
    return (
@@ -209,7 +175,7 @@ const BookModifier = ({ bookId, type, auth }: any) => {
                                  name="thumbnail"
                                  id="thumbnail"
                                  accept=".jpeg, .jpg, .png, .gif"
-                                 onChange={(e: any) => previewImage(e.target.files[0], setThumbnailPreview)}
+                                 onChange={(e: any) => imagePreviewer(e.target.files[0], setThumbnailPreview, 800)}
                                  style={fileStyle}
                               />
                            </div>

@@ -1,4 +1,4 @@
-import { apiHandler, imgSrcSet } from '@/Functions/common';
+import { apiHandler, imagePreviewer, imgSrcSet } from '@/Functions/common';
 import { useFetch } from '@/Hooks/useFetch';
 import { API_URLS } from '@/constants/constant';
 import dynamic from 'next/dynamic';
@@ -20,25 +20,6 @@ const ArticleModifier = ({ articleId, type, auth }: any) => {
    const article = data?.data?.article;
 
    const [description, setDescription] = useState<string>(article?.content || "");
-
-   // Image pre-viewer
-   function previewImage(file: any, setState: any) {
-
-      const fileReader = new FileReader();
-
-      fileReader.onload = (event: any) => {
-
-         if ((file?.size / 1024) > 800) {
-            setState("");
-            return window.alert("File size must be 400KB");
-         }
-
-         const src = event.target.result;
-         setState(src);
-      };
-
-      fileReader.readAsDataURL(file);
-   }
 
    async function handleArticle(e: any) {
       try {
@@ -143,7 +124,7 @@ const ArticleModifier = ({ articleId, type, auth }: any) => {
                                  name="thumbnail"
                                  id="thumbnail"
                                  accept=".jpeg, .jpg, .png, .gif"
-                                 onChange={(e: any) => previewImage(e.target.files[0], setThumbnailPreview)}
+                                 onChange={(e: any) => imagePreviewer(e.target.files[0], setThumbnailPreview, 800)}
                                  style={fileStyle}
                               />
                            </div>
@@ -156,15 +137,10 @@ const ArticleModifier = ({ articleId, type, auth }: any) => {
                         </div>
 
 
-                        <div className="col-12">
+                        <div className="col-12 mb-3">
                            <label htmlFor="content" className='form-label'>Description</label>
                            <CustomEditor setData={setDescription} initialData={article?.content || 'This is custom editor'}></CustomEditor>
                         </div>
-
-                        {/* <div className="col-12 mb-3">
-                           <label htmlFor="content" className='form-label'>Description</label>
-                           <textarea name="content" className='form-control' id="content" cols={30} rows={8} defaultValue={article?.content || ""}></textarea>
-                        </div> */}
 
                         <div className="col-12 mb-3">
                            <label htmlFor="keywords" className='form-label'>Keywords</label>

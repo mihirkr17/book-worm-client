@@ -66,3 +66,38 @@ export const API_URLS = {
    checkAccUrl: `/users/credential/check-account`,
    resetPwdUrl: `/auth/credential/reset-password`
 }
+
+
+// books categories
+export const BOOK_CATEGORIES = [
+   "Fiction",
+   "Mystery",
+   "Thriller",
+   "Romance",
+   "Science Fiction",
+   "Fantasy",
+   "Horror",
+   "Historical Fiction",
+   "Adventure",
+   "Biography",
+   "Autobiography",
+   "Self-Help",
+   "Business",
+   "Travel",
+   "Poetry",
+   "Memoir",
+   "Young Adult",
+   "Children's",
+   "Graphic Novel",
+   "Cookbooks",
+   "Art",
+   "Philosophy",
+   "Religion",
+   "Science",
+   "Psychology",
+   "Sociology",
+   "Education",
+   "Politics",
+   "Economics",
+   "Health and Fitness"
+]

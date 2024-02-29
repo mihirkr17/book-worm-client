@@ -11,6 +11,7 @@ export default ProtectedPage(function (props: any) {
    const { setPopupMsg } = props?.auth;
    const router = useRouter();
    const itemsPerPage = 12;
+   const [jumpPage, setJumpPage] = useState(1);
 
    const currentPage = parseInt(router.query.page as string, 10) || 1;
    const [filterInfo, setFilterInfo] = useState({
@@ -172,6 +173,11 @@ export default ProtectedPage(function (props: any) {
                      <a className="page-link" href="#" onClick={() => handlePageChange(currentPage + 1)}>Next</a>
                   </li>
                </ul>
+
+               <div className='d-flex align-items-center justify-content-center flex-row' style={{ width: "200px" }}>
+                  <input type="number" className="form-control form-control-sm" defaultValue={currentPage} onChange={(e: any) => setJumpPage(e.target.value)} />
+                  <button className='btn btn-sm btn-primary' onClick={() => handlePageChange(jumpPage)}>Jump</button>
+               </div>
             </nav>
          }
       </div>
