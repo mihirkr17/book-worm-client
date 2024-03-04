@@ -8,14 +8,38 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css';
 import { getDateTime, imgSrcSet, titleViewer } from "@/Functions/common";
-// import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import CustomBookCard from "@/components/Cards/CustomBookCard";
 import { SERVER_URI } from "@/constants/constant";
 
-function Home({ highestRatedBooks, newestBooks, article }: any) {
 
+export async function getServerSideProps() {
+  // Fetch data from external API
+  try {
+    const res = await fetch(`${SERVER_URI}api/v1/overview`)
+    const data = await res.json()
 
+    // Pass data to the page via props
+    return {
+      props: {
+        highestRatedBooks: data?.data?.searchResults?.highestRatedBooks || [],
+        newestBooks: data?.data?.searchResults?.newestBooks || [],
+        article: data?.data?.article || {}
+      }
+    }
+  } catch (error: any) {
+    console.log(error?.message);
+    return {
+      props: {
+        highestRatedBooks: [],
+        newestBooks: [],
+        article: {}
+      }
+    };
+  }
+}
+
+export default function Home({ highestRatedBooks, newestBooks, article }: any) {
   // Home slider viewport options
   const homeSlideBreakPoints = {
     0: {
@@ -125,34 +149,3 @@ function Home({ highestRatedBooks, newestBooks, article }: any) {
     </>
   );
 }
-
-
-export async function getStaticProps() {
-  // Fetch data from external API
-  try {
-    const res = await fetch(`${SERVER_URI}api/v1/overview`, {
-      method: "GET"
-    })
-    const data = await res.json()
-
-    // Pass data to the page via props
-    return {
-      props: {
-        highestRatedBooks: data?.data?.searchResults?.highestRatedBooks || [],
-        newestBooks: data?.data?.searchResults?.newestBooks || [],
-        article: data?.data?.article || {}
-      }
-    }
-  } catch (error: any) {
-    console.log(error?.message);
-    return {
-      props: {
-        highestRatedBooks: [],
-        newestBooks: [],
-        article: {}
-      }
-    };
-  }
-}
-
-export default Home
