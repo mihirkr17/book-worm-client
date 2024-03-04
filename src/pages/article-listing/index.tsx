@@ -37,7 +37,8 @@ const ArticleListingIndex = ({ searchedArticles, totalArticlesCount, recentArtic
       <div>
          <div className="py-4">
             <form onSubmit={searchArticleHandler} className='d-flex' role="search">
-               <input type="search" className='form-control me-2' name="searchArticle" id="searchArticle" defaultValue={router?.query?.q || ""} />
+               <input type="search" className='form-control me-2' name="searchArticle" id="searchArticle" placeholder='Search Article'
+                  defaultValue={router?.query?.q || ""} />
                <button type='submit' className='btn btn-outline-success'>Search</button>
             </form>
          </div>
@@ -47,24 +48,6 @@ const ArticleListingIndex = ({ searchedArticles, totalArticlesCount, recentArtic
                   Array.isArray(searchedArticles) && totalArticlesCount >= 1 ? searchedArticles.map((article: any) => {
                      return (
                         <ArticleCard key={article?._id} article={article}></ArticleCard>
-                        // <div className="col" key={article?._id}>
-                        //    <div className="card h-100 card-highlight">
-                        //       <img src={imgSrcSet(article?.thumbnail)} className="card-img" />
-                        //       <div className="card-body d-flex flex-column justify-content-between">
-                        //          <h5 className="card-title">{article?.title}</h5>
-                        //          <p className="article-meta text-left">
-                        //             <span>Published on {getDateTime(article?.articleCreatedAt)}</span>
-                        //             <br />
-                        //             <strong>By {article?.authorName}</strong>
-                        //          </p>
-
-                        //          <p className="first-paraf">
-                        //             {article?.metaDescription && article?.metaDescription.length >= 100 ? article?.metaDescription.slice(0, 100) + "..." : article?.metaDescription}
-                        //          </p>
-                        //          <Link href={`/article/${article?._id}`} className="btn btn-dark ">Read more</Link>
-                        //       </div>
-                        //    </div>
-                        // </div>
                      )
                   }) : <div>
                      <p>No articles found</p>
@@ -81,13 +64,20 @@ const ArticleListingIndex = ({ searchedArticles, totalArticlesCount, recentArtic
                               <a className="page-link" href="#" onClick={() => handlePageChange(currentPage - 1)}>Previous</a>
                            </li>
 
-                           {Array.from({ length: Math.ceil(totalArticlesCount / itemsPerPage) }, (_, index) => (
-                              <li key={index} className={`page-item ${currentPage === index + 1 && 'active'}`}>
-                                 <a className="page-link" href="#" onClick={() => handlePageChange(index + 1)}>
-                                    {index + 1}
-                                 </a>
-                              </li>
-                           ))}
+                           {Array.from({ length: Math.ceil(totalArticlesCount / itemsPerPage) }, (_, index) => {
+                              const startPage = (Math.floor((currentPage - 1) / 7) * 7) + 1;
+                              const endPage = Math.min(startPage + 6, Math.ceil(totalArticlesCount / itemsPerPage));
+                              if (index + 1 >= startPage && index + 1 <= endPage) {
+                                 return (
+                                    <li key={index} className={`page-item ${currentPage === index + 1 && 'active'}`}>
+                                       <a className="page-link" href="#" onClick={() => handlePageChange(index + 1)}>
+                                          {index + 1}
+                                       </a>
+                                    </li>
+                                 );
+                              }
+                              return null;
+                           })}
 
                            <li className={`page-item ${currentPage === Math.ceil(totalArticlesCount / itemsPerPage) && 'disabled'}`}>
                               <a className="page-link" href="#" onClick={() => handlePageChange(currentPage + 1)}>Next</a>
@@ -106,7 +96,7 @@ const ArticleListingIndex = ({ searchedArticles, totalArticlesCount, recentArtic
                   <div className="row">
                      {
                         Array.isArray(recentArticles) && recentArticles.map((article: any) => {
-                           return (<div className="col-12" key={article?._id}>
+                           return (<div className="col-12 mb-4" key={article?._id}>
                               <div className="row">
                                  <div className="col-4">
                                     <img src={imgSrcSet(article?.thumbnail)} style={{ width: "100%" }} alt="Recent Article Image" />

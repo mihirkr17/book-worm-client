@@ -5,7 +5,7 @@ import React from 'react';
 
 const ArticleCard = ({ article }: any) => {
    return (
-      <article className="row">
+      <article className="row mb-3">
 
          <div className="col-md-5">
             <div style={{height: "200px"}}>
