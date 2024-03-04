@@ -1,22 +1,22 @@
 #content-wrapper {
-   padding: 50px 0;
+  padding: 50px 0;
 }
 
 .container {
-   /* min-height: 74.3%; */
+  /* min-height: 74.3%; */
 }
 
 .pagination a.page-link {
-   color: black;
+  color: black;
 }
 
 .pagination a.page-link:hover {
-   color: #11a6a1;
-   text-decoration: none;
+  color: #11a6a1;
+  text-decoration: none;
 }
 
 .custom-pagination-margin {
-   margin-top: 60px;
+  margin-top: 60px;
 }
 
 /* .btn {
@@ -35,230 +35,371 @@
 } */
 
 .btn-dark {
-   background-color: #1c1854;
-   color: white;
-   /* border-radius: 25px; */
-   border: none;
-   font-size: 0.9rem;
-   align-self: flex-end;
-   margin-right: 15px;
+  background-color: #1c1854;
+  color: white;
+  /* border-radius: 25px; */
+  border: none;
+  font-size: 0.9rem;
+  align-self: flex-end;
+  margin-right: 15px;
 }
 
 .btn-dark:hover {
-   background-color: #11a6a1;
+  background-color: #11a6a1;
 }
 
 .button-group {
-   display: flex;
-   justify-content: center;
-   align-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .button-group .btn {
-   margin-inline: 15px;
+  margin-inline: 15px;
 }
 
 /* sign up & login page css */
 .headline {
-   font-weight: bold;
-   margin-top: 60px;
-   color: #1c1854;
+  font-weight: bold;
+  margin-top: 60px;
+  color: #1c1854;
 }
 
 .left-column {
-   background-color: #89b3ca;
-   padding: 20px;
-   border-radius: 15px;
+  background-color: #89b3ca;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.right-column {
+  background-color: #f2f2f2;
+  color: #34373f;
+  padding: 20px;
+  border-radius: 15px;
 }
 
 .form-group {
-   font-weight: bold;
+  font-weight: bold;
 }
 
 .form-row {
-   margin: 0 auto;
-   display: flex;
-   flex-direction: column;
-   align-items: center;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* Custom Card design  */
 
 /***************************************************************************/
 :root {
-   --headingfont: "ProximaNovaRegular";
+  --headingfont: "ProximaNovaRegular";
 }
+
 /***************************** DEFAULTS ***************************************/
 
 .book_card__wrapper {
-   margin: auto;
-   margin-top: 9%;
-   min-height: 300px;
-   width: 100%;
-   display: flex;
-   flex-direction: row;
-   flex-wrap: nowrap;
-   border-radius: 1%;
-   background: rgb(246, 246, 246);
-   box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
+  margin: auto;
+  margin-top: 9%;
+  min-height: 300px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  border-radius: 1%;
+  background: rgb(246, 246, 246);
+  box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
 }
 
 .book_card__img {
-   flex-basis: 50%;
-   background-size: cover;
-   background-position: 50% 50%;
+  flex-basis: 50%;
+  background-size: cover;
+  background-position: 50% 50%;
 }
 
 .book_card__info {
-   flex-basis: 50%;
-   padding: 10px 8px;
-   position: relative;
-   background-color: #f6f6f6;
+  flex-basis: 50%;
+  padding: 10px 8px;
+  position: relative;
+  background-color: #f6f6f6;
 }
+
 .book_card__info .title {
-   font-size: 1.3rem;
-   line-height: 1.2;
-   margin-bottom: 5%;
-   color: #202020;
-   min-height: 140px;
+  font-size: 1.3rem;
+  line-height: 1.2;
+  margin-bottom: 5%;
+  color: #202020;
+  min-height: 140px;
 }
+
 .book_card__info .author {
-   font-size: 0.885rem;
-   color: #8a8a8a;
-   font-style: normal;
-   min-height: 100px;
+  font-size: 0.885rem;
+  color: #8a8a8a;
+  font-style: normal;
+  min-height: 100px;
 }
 
 .book_card__img {
-   position: relative;
+  position: relative;
 }
 
 .book_card__img .stars {
-   font-size: 13px;
-   color: orange;
-   text-align: center;
-   background-color: #f6f6f6;
-   width: max-content;
-   padding: 3px 10px;
-   margin: auto;
-   position: absolute;
-   top: 0;
-   right: 0;
-   border-bottom-left-radius: 50px;
+  font-size: 13px;
+  color: orange;
+  text-align: center;
+  background-color: #f6f6f6;
+  width: max-content;
+  padding: 3px 10px;
+  margin: auto;
+  position: absolute;
+  top: 0;
+  right: 0;
+  border-bottom-left-radius: 50px;
 }
 
 .book_card__info .controls {
-   margin: 0;
-   padding: 0;
-   list-style: none;
-   display: flex;
-   width: 100%;
-   overflow: hidden;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  width: 100%;
+  overflow: hidden;
 }
+
 .book_card__info .controls li {
-   color: #242424;
-   text-decoration: none;
-   cursor: pointer;
-   list-style: none;
-   flex-basis: 33%;
-   flex-grow: 1;
-   display: flex;
-   font-weight: 500;
-   letter-spacing: 1px;
-   font-size: 12px;
+  color: #242424;
+  text-decoration: none;
+  cursor: pointer;
+  list-style: none;
+  flex-basis: 33%;
+  flex-grow: 1;
+  display: flex;
+  font-weight: 500;
+  letter-spacing: 1px;
+  font-size: 12px;
 }
+
 .controls a {
-   display: block;
-   position: relative;
-   text-decoration: none;
-   margin: auto;
-   padding: 2px 1rem;
+  display: block;
+  position: relative;
+  text-decoration: none;
+  margin: auto;
+  padding: 2px 1rem;
 }
 
 .controls button {
-   background-color: transparent;
-   border: unset;
-   color: inherit;
-   font-size: inherit;
-   padding: 2px 1rem;
-   position: relative;
+  background-color: transparent;
+  border: unset;
+  color: inherit;
+  font-size: inherit;
+  padding: 2px 1rem;
+  position: relative;
 }
 
 .controls a::after,
 .controls button::after {
-   content: "";
-   height: 100%;
-   width: 100%;
-   position: absolute;
-   top: 0;
-   left: 0;
-   opacity: 0;
-   box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
-   transition: opacity 0.3s ease;
+  content: "";
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.3);
+  transition: opacity 0.3s ease;
 }
+
 .controls a:hover::after,
 .controls button:hover::after {
-   opacity: 1;
+  opacity: 1;
 }
 
 /* Article Css */
 .article-recent {
-   display: flex;
-   flex-direction: column;
-   margin-bottom: 2em;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 2em;
 }
 
 .subtitle {
-   font-size: 0.85rem;
-   font-weight: 700;
-   margin: 0;
-   color: #1792d2;
-   letter-spacing: 0.05em;
-   font-family: "Ubuntu Bold", sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  margin: 0;
+  color: #1792d2;
+  letter-spacing: 0.05em;
+  font-family: "Ubuntu Bold", sans-serif;
 }
+
 .article-title {
-   font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 .article-read-more,
 .article-info {
-   font-size: 0.875rem;
+  font-size: 0.875rem;
 }
 
 .article-read-more {
-   color: #1792d2;
-   text-decoration: none;
-   font-weight: 700;
+  color: #1792d2;
+  text-decoration: none;
+  font-weight: 700;
 }
+
 .article-read-more:hover,
 .article-read-more:focus {
-   color: #143774;
-   text-decoration: underline;
+  color: #143774;
+  text-decoration: underline;
 }
+
 .article-info {
-   padding: 10px 0 5px 0;
+  padding: 10px 0 5px 0;
 }
 
 .article-body {
-   width: 100%;
-   text-align: justify;
+  width: 100%;
+  text-align: justify;
 }
 
 .article-recent-main {
-   order: 2;
+  order: 2;
 }
 
 .article-recent-secondary {
-   order: 1;
+  order: 1;
 }
 
 .article-recent-secondary img {
-   max-width: 100%;
-   display: block;
+  max-width: 100%;
+  display: block;
 }
 
 .custom_label {
-   font-size: 13px;
-   letter-spacing: 0.3px;
-   font-weight: normal;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  font-weight: normal;
+}
+
+
+/* Rating Points Design */
+:root {
+  --star-rating-max-stars: 10;
+  --star-rating-star-color-active: orange;
+  --star-rating-star-color-disabled: #555;
+  --star-rating-star-color-hover: #926900;
+  --star-rating-star-color-selected: var(--star-rating-star-color-hover);
+  --star-rating-star-color: #000000;
+  --star-rating-star-scale-hover: 1.3;
+  --star-rating-star-size: 1.5;
+}
+
+fieldset.star-rating {
+  border: none;
+  padding: 0;
+  margin: 0;
+
+  display: inline-grid;
+  grid-template-columns: repeat(var(--star-rating-max-stars), 1fr);
+  grid-template-columns: 1fr;
+  width: fit-content;
+
+  & label {
+    cursor: pointer;
+    text-align: center;
+  }
+
+  & input {
+    appearance: none;
+    background-color: transparent;
+    cursor: pointer;
+    grid-row: 2;
+    height: auto;
+    margin: 0;
+    padding: 0.2rem;
+    text-align: center;
+    transition: transform 0.2s ease-out;
+    width: auto;
+  }
+
+  & input:after {
+    color: var(--star-rating-star-color);
+    content: "\2606\FE0F";
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: calc(1rem * var(--star-rating-star-size));
+  }
+
+  & input:hover:after {
+    color: var(--star-rating-star-color-hover);
+    content: "\2605\FE0F";
+  }
+
+  & input:checked:after {
+    color: var(--star-rating-star-color-selected);
+    content: "\2605\FE0F";
+  }
+
+  & input:has(~ input:hover):after,
+  & input:has(~ input:checked):after,
+  & input:has(~ input:focus):after {
+    color: var(--star-rating-star-color-selected);
+    content: "\2605";
+  }
+
+  & input:hover ~ input:after {
+    color: var(--star-rating-star-color);
+    content: "\2606";
+  }
+
+  @media (hover) {
+    & input:hover {
+      transform: scale(var(--star-rating-star-scale-hover));
+    }
+
+    & input:active {
+      transform: scale(calc(var(--star-rating-star-scale-hover) + 0.3));
+    }
+
+    & input:active:after {
+      animation: 0.1s linear 0s forwards star-rating-active-anim;
+    }
+  }
+}
+
+@keyframes star-rating-active-anim {
+  from {
+    color: var(--star-rating-star-color-hover);
+  }
+  to {
+    color: var(--star-rating-star-color-active);
+  }
+}
+
+fieldset.star-rating .color-active:after {
+   color: var(--star-rating-star-color-selected);
+   content: "\2605\FE0F";
+}
+
+/* https://www.a11yproject.com/posts/how-to-hide-content/ */
+fieldset.star-rating.hidelabels label {
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  overflow: hidden;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
+
+fieldset.star-rating:disabled {
+  & label,
+  & input {
+    pointer-events: none;
+  }
+
+  & label,
+  & input:after,
+  & input:has(~ input:hover):after,
+  & input:has(~ input:checked):after,
+  & input:has(~ input:focus):after {
+    color: var(--star-rating-star-color-disabled);
+  }
 }

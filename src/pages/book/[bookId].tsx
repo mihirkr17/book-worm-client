@@ -153,14 +153,14 @@ const BookDetails = (props: any) => {
 
          <div className="row justify-content-center row">
 
-            <div className="col-md-4 text-center left-column">
-               <img src={book?.thumbnail}
-                  alt="Book Cover" className="img-fluid rounded mb-3" />
+            <div className="col-md-4 text-center">
+               <div className='main_book_image mb-3'>
+                  <img src={book?.thumbnail} alt="Book Cover" className="img-fluid rounded" />
+               </div>
                <div className="rating-text">
                   <span className="rating-value">Average Rating: {book?.averageRatings || 0}/10</span>
                   <span>({book?.totalRatingsCount || 0} Votes)</span>
                </div>
-
 
                <form className="rating my-4 d-flex align-items-center justify-content-center gap-2 ">
                   {
@@ -168,11 +168,16 @@ const BookDetails = (props: any) => {
 
                         const isChecked = book?.ratingUserId && book?.ratingUserId === user?._id;
 
+                        const isPointInRange = point >= 1 && point <= book?.ratingUserValue; // Assuming upperLimit is dynamically set
+                        const colorClass = isPointInRange ? `color-active` : '';
+
                         return (
                            <div key={point}>
-                              <label htmlFor={`${point}`}>{point}&nbsp;☆</label>
-                              <input type="radio" name="rating" value={`${point}`} id={`${point}`}
-                                 checked={isChecked && book?.ratingUserValue === point ? true : false} onChange={e => handleRating(e.target.value)} />
+                              <fieldset className="star-rating hidelabels">
+                                 <label htmlFor={`rating-${point}`}>{point}</label>
+                                 <input type="radio" className={colorClass} name="rating" title={point + " Star"} value={`${point}`} id={`rating-${point}`}
+                                    checked={isChecked && book?.ratingUserValue === point} onChange={e => handleRating(e.target.value)} />
+                              </fieldset>
                            </div>
 
                         )
@@ -181,16 +186,22 @@ const BookDetails = (props: any) => {
                </form>
 
 
-               <button className="btn btn-primary w-100 mb-2" onClick={() => handleReadAndToRead(book?._id, "to-read")}>Want to read</button>
-               <button className="btn btn-secondary w-100" onClick={() => handleReadAndToRead(book?._id, "read")}>Already read</button>
+               <div className='row'>
+                  <div className="col-6">
+                     <button className="btn btn-primary mx-1 w-100" onClick={() => handleReadAndToRead(book?._id, "to-read")}>Want to read</button>
+                  </div>
+                  <div className="col-6">
+                     <button className="btn btn-secondary mx-1 w-100" onClick={() => handleReadAndToRead(book?._id, "read")}>Already read</button>
+                  </div>
+               </div>
             </div>
 
             {/* Book Details */}
-            <div className="col-md-8 right-column">
+            <div className="col-md-8">
                <h1 className="h1 text-center">{book?.title}</h1>
                <h2 className="h6 text-center">Author: &nbsp;{book?.authors}</h2>
 
-               <h3 className="h3 text-center">Chaos and Order</h3>
+               <h3 className="h3 text-center">{book?.subTitle}</h3>
                <p className="">
                   {book?.description}
                </p>
@@ -211,9 +222,9 @@ const BookDetails = (props: any) => {
                      <React.Fragment key={comment?._id}>
                         <div className="be-comment">
                            <div className="be-comment-content">
-                              <div >
+                              <div className='be-comment-header'>
                                  <span className="be-comment-name">
-                                    <a>{comment?.commentAuthorName}</a>
+                                    {comment?.commentAuthorName}
                                  </span>
                                  <span className="be-comment-time">
                                     <i className="fa fa-clock-o"></i>
@@ -225,9 +236,12 @@ const BookDetails = (props: any) => {
                                     comment?.content
                                  }
                               </p>
-                              <span className="be-comment-report">
+                              <div className="be-comment-footer">
 
-                                 <button className='btn btn-sm' style={{ background: "transparent" }} title="Report this comment" onClick={() => reportCommentHandler(comment?._id)}>
+                                 <button className='btn btn-sm comment-report-btn'
+                                    style={{ background: "transparent" }}
+                                    title="Report this comment"
+                                    onClick={() => reportCommentHandler(comment?._id)}>
                                     <FontAwesomeIcon icon={faFlag} />
                                  </button>
 
@@ -236,7 +250,7 @@ const BookDetails = (props: any) => {
                                        <FontAwesomeIcon icon={faTrashAlt}></FontAwesomeIcon>
                                     </button>
                                  }
-                              </span>
+                              </div>
                            </div>
                         </div>
                         <hr />
