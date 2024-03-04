@@ -8,12 +8,12 @@ import { Swiper, SwiperSlide } from 'swiper/react';
 // Import Swiper styles
 import 'swiper/css';
 import { getDateTime, imgSrcSet, titleViewer } from "@/Functions/common";
-import { InferGetServerSidePropsType } from "next";
+// import { InferGetServerSidePropsType } from "next";
 import Head from "next/head";
 import CustomBookCard from "@/components/Cards/CustomBookCard";
 import { SERVER_URI } from "@/constants/constant";
 
-function Home({ highestRatedBooks, newestBooks, article }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+function Home({ highestRatedBooks, newestBooks, article }: any) {
 
 
   // Home slider viewport options
@@ -127,7 +127,7 @@ function Home({ highestRatedBooks, newestBooks, article }: InferGetServerSidePro
 }
 
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   // Fetch data from external API
   try {
     const res = await fetch(`${SERVER_URI}api/v1/overview`, {
