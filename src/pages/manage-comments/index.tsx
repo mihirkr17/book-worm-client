@@ -1,7 +1,7 @@
 import EditorProtectedPage from '@/Functions/EditorProtectedPage';
 import { apiHandler } from '@/Functions/common';
 import { useFetch } from '@/Hooks/useFetch';
-import { API_URLS } from '@/constants/constant';
+import { API_URLS, BASE_URLS } from '@/constants/constant';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -55,7 +55,7 @@ export default EditorProtectedPage(function (props: any) {
             </header>
          </div>
 
-         <div className="left-column">
+         <div className="table-responsive">
 
             <table className="table table-bordered text-center align-middle">
                <thead>
@@ -64,21 +64,28 @@ export default EditorProtectedPage(function (props: any) {
                      <th scope="col">Author</th>
                      <th scope="col">Content</th>
                      <th scope="col">No Reports</th>
+                     <th>Suspicious</th>
                      <th scope="col">Action</th>
                   </tr>
                </thead>
                <tbody>
                   {
-                     Array.isArray(searchedComments) && totalCommentsCount >= 1 ? searchedComments.map((comment: any, index: number) => {
+                     (Array.isArray(searchedComments) && totalCommentsCount >= 1) ? searchedComments.map((comment: any, index: number) => {
                         return (
                            <tr key={comment?._id}>
                               <th scope="row">{articleNumber + index}</th>
-
-                              <td>{comment?.author}</td>
+                              <td>{comment?.commentAuthorName}</td>
                               <td>{comment?.content}</td>
                               <td>{comment?.reportsCount || 0}</td>
+                              <td>{comment?.suspicious ? "true" : "false"}</td>
                               <td>
-                                 <button type="button" className="btn btn-dark ms-3" onClick={() => deleteCommentHandler(comment?._id)}>Delete</button>
+                                 <button className="btn btn-info btn-sm ms-3" onClick={() => router.push(BASE_URLS?.bookUrl(comment?.bookId))}>
+                                    Details
+                                 </button>
+                                 <button type="button" className="btn btn-danger btn-sm ms-3"
+                                    onClick={() => deleteCommentHandler(comment?._id)}>
+                                    Delete
+                                 </button>
                               </td>
                            </tr>
                         )
@@ -100,13 +107,21 @@ export default EditorProtectedPage(function (props: any) {
                      <a className="page-link" href="#" onClick={() => handlePageChange(currentPage - 1)}>Previous</a>
                   </li>
 
-                  {Array.from({ length: Math.ceil(totalCommentsCount / itemsPerPage) }, (_, index) => (
-                     <li key={index} className={`page-item ${currentPage === index + 1 && 'active'}`}>
-                        <a className="page-link" href="#" onClick={() => handlePageChange(index + 1)}>
-                           {index + 1}
-                        </a>
-                     </li>
-                  ))}
+
+                  {Array.from({ length: Math.ceil(totalCommentsCount / itemsPerPage) }, (_, index) => {
+                     const startPage = (Math.floor((currentPage - 1) / 7) * 7) + 1;
+                     const endPage = Math.min(startPage + 6, Math.ceil(totalCommentsCount / itemsPerPage));
+                     if (index + 1 >= startPage && index + 1 <= endPage) {
+                        return (
+                           <li key={index} className={`page-item ${currentPage === index + 1 && 'active'}`}>
+                              <a className="page-link" href="#" onClick={() => handlePageChange(index + 1)}>
+                                 {index + 1}
+                              </a>
+                           </li>
+                        );
+                     }
+                     return null;
+                  })}
 
                   <li className={`page-item ${currentPage === Math.ceil(totalCommentsCount / itemsPerPage) && 'disabled'}`}>
                      <a className="page-link" href="#" onClick={() => handlePageChange(currentPage + 1)}>Next</a>
