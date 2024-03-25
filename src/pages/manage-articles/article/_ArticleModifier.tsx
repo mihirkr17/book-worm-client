@@ -21,6 +21,7 @@ const ArticleModifier = ({ articleId, type, auth }: any) => {
 
    const [description, setDescription] = useState<string>(article?.content || "");
 
+
    async function handleArticle(e: any) {
       try {
 
@@ -28,7 +29,7 @@ const ArticleModifier = ({ articleId, type, auth }: any) => {
 
          const formData = new FormData(e.target);
 
-         formData.append("content", description);
+         formData.append("content", description || article?.content);
 
          let uri: string = API_URLS.createArticleUrl;
          let method = "POST";
