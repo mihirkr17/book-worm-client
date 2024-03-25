@@ -1,42 +1,53 @@
 /* eslint-disable react/no-unescaped-entities */
 
 import Link from "next/link";
+import Head from "next/head";
+import dynamic from "next/dynamic";
 
 // Import Swiper React components
 import { Swiper, SwiperSlide } from 'swiper/react';
-
 // Import Swiper styles
 import 'swiper/css';
-import { getDateTime, imgSrcSet, titleViewer } from "@/Functions/common";
-import Head from "next/head";
-import CustomBookCard from "@/components/Cards/CustomBookCard";
+
+import { getDateTime, imgSrcSet } from "@/Functions/common";
 import { SERVER_URI } from "@/constants/constant";
 
+const CustomBookCard = dynamic(() => import("@/components/Cards/CustomBookCard"));
 
 export async function getServerSideProps() {
   // Fetch data from external API
-  try {
-    const res = await fetch(`${SERVER_URI}api/v1/overview`)
-    const data = await res.json()
 
-    // Pass data to the page via props
-    return {
-      props: {
-        highestRatedBooks: data?.data?.searchResults?.highestRatedBooks || [],
-        newestBooks: data?.data?.searchResults?.newestBooks || [],
-        article: data?.data?.article || {}
+  let retry = 0;
+  const maxRetries = 4;
+
+  while (retry < maxRetries) {
+    try {
+      const res = await fetch(`${SERVER_URI}api/v1/overview`);
+      const data = await res.json();
+
+      // Pass data to the page via props
+      return {
+        props: {
+          highestRatedBooks: data?.data?.searchResults?.highestRatedBooks || [],
+          newestBooks: data?.data?.searchResults?.newestBooks || [],
+          article: data?.data?.article || {}
+        }
       }
+
+    } catch (error: any) {
+      await new Promise(r => setTimeout(r, 5000));
+      retry++;
     }
-  } catch (error: any) {
-    console.log(error?.message);
-    return {
-      props: {
-        highestRatedBooks: [],
-        newestBooks: [],
-        article: {}
-      }
-    };
   }
+
+  return {
+    props: {
+      highestRatedBooks: [],
+      newestBooks: [],
+      article: {}
+    }
+  };
+
 }
 
 export default function Home({ highestRatedBooks, newestBooks, article }: any) {
