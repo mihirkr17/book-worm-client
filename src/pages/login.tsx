@@ -1,24 +1,26 @@
 
-import { addCookie, apiHandler } from '@/Functions/common';
+import { CookieParser, addCookie, apiHandler } from '@/Functions/common';
 import { API_URLS, BASE_URLS } from '@/constants/constant';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 const Login = (props: any) => {
    const router = useRouter();
-   const { authRefetch, user, setPopupMsg } = props?.auth;
+   const { authRefetch, setPopupMsg } = props?.auth;
 
-
-   useEffect(() => {
-      if (user?.role || user?._id) {
-         router.push("/");
-      }
-   }, [user, router]);
+   const redirectUri: any = router?.query?.redirect_uri;
 
    async function handleLogin(e: any) {
       try {
          e.preventDefault();
+
+         const cookie = CookieParser();
+
+         if (cookie?.appSession) {
+            setPopupMsg("You already logged in.", "success");
+            return router.push(BASE_URLS?.root);
+         }
 
          const email = e.target.email.value;
          const password = e.target.password.value;
@@ -26,7 +28,7 @@ const Login = (props: any) => {
          const result = await apiHandler(API_URLS?.loginUrl, "POST", { email, password });
 
          if (result?.success) {
-            const { data, message, success } = result;
+            const { data } = result;
 
             if (data?.accessToken) {
                let cookieResult = addCookie("appSession", data?.accessToken, 16);
@@ -34,10 +36,16 @@ const Login = (props: any) => {
                if (!cookieResult)
                   return setPopupMsg("Failed to set authentication !", "danger");
 
-               authRefetch() && router.push(BASE_URLS?.root);
-               return;
-            }
+               authRefetch();
 
+               if (redirectUri) {
+                  console.log("Redirecting to:", redirectUri); // Log the redirectUri
+                  router.push(redirectUri);
+               } else {
+                  router.push(BASE_URLS?.root);
+               }
+
+            }
          }
 
          setPopupMsg(result?.message, result?.success ? "success" : "danger")

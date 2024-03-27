@@ -20,9 +20,12 @@ const BookDetails = (props: any) => {
    // Add book Ratings
    async function handleRating(value: string) {
       try {
-         if (!value) return;
+         if (!value) throw new Error(`Unexpected error when rate this book!`);
 
-         if (!user?._id) throw new Error(`Please Login`);
+         if (!user?._id) {
+            router.push(`/login?redirect_uri=${router?.asPath}`);
+            throw new Error(`Please Login`);
+         }
 
          const result = await apiHandler(API_URLS?.bookRateUrl(book?._id), "POST", { rating: parseInt(value) });
 
@@ -43,7 +46,11 @@ const BookDetails = (props: any) => {
       try {
 
          e.preventDefault();
-         if (!user?._id) throw new Error(`Please Login`);
+
+         if (!user?._id) {
+            router.push(`/login?redirect_uri=${router?.asPath}`);
+            throw new Error(`Please Login`);
+         }
 
          const content = e.target.content.value;
 
@@ -73,7 +80,11 @@ const BookDetails = (props: any) => {
 
       try {
 
-         if (!user?._id) throw new Error(`Please Login`);
+         if (!user?._id) {
+            router.push(`/login?redirect_uri=${router?.asPath}`);
+            throw new Error(`Please Login`);
+         }
+
          if (!["read", "to-read"].includes(status)) throw new Error("Invalid status!");
 
          const result = await apiHandler(API_URLS?.bookReadToReadUrl(bookId), "PUT", { status })
@@ -93,7 +104,10 @@ const BookDetails = (props: any) => {
    async function reportCommentHandler(commentId: string) {
       try {
 
-         if (!user?._id) throw new Error(`Please Login Here`);
+         if (!user?._id) {
+            router.push(`/login?redirect_uri=${router?.asPath}`);
+            throw new Error(`Please Login`);
+         }
 
 
          const result = await apiHandler(API_URLS?.bookCommentReportUrl(commentId), "POST");
@@ -113,7 +127,10 @@ const BookDetails = (props: any) => {
    async function handleDeleteOwnComment(commentId: any, bookId: string) {
       try {
 
-         if (!user?._id) throw new Error(`Please Login`);
+         if (!user?._id) {
+            router.push(`/login?redirect_uri=${router?.asPath}`);
+            throw new Error(`Please Login`);
+         }
 
          const result = await apiHandler(API_URLS?.bookDeleteOwnCommentUrl(commentId, bookId), "DELETE")
 
