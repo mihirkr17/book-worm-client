@@ -64,7 +64,10 @@ export const API_URLS = {
    userSignUpUrl: `/auth/user/signup`,
    loginUrl: `/auth/login`,
    checkAccUrl: `/users/credential/check-account`,
-   resetPwdUrl: `/auth/credential/reset-password`
+   resetPwdUrl: `/auth/credential/reset-password`,
+   articleStatusUrl: function (articleId: any) {
+      return `/articles/status/${articleId}`
+   }
 }
 
 
